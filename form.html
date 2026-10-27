@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact &amp; Client Inquiries | Priyanshu Bhatta</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+              950: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+  <!-- Floating Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-blue-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none">
+    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    <span id="toast-msg" class="text-sm font-semibold">Notification</span>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#top" id="top-brand-link" class="flex items-center space-x-3">
+        <span class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">PB</span>
+        <div>
+          <span class="font-bold text-base sm:text-lg text-slate-100 tracking-tight">Priyanshu Bhatta</span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Client &amp; Recruiter Inbox</span>
+        </div>
+      </a>
+      <button type="button" id="back-home-btn" class="text-xs font-semibold text-slate-400 hover:text-blue-400 transition-colors flex items-center space-x-1.5">
+        <span>&larr; Back to Portfolio</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden flex items-center justify-center">
+    <!-- Background Ambient Glow -->
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-xl w-full relative z-10">
+      
+      <!-- Intro Card -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
+          <span>Netlify Forms Database Connected</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
+          Let&rsquo;s Build Something Impactful
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
+          Submit your internship opportunity, engineering project, or client inquiry below. Every submission is automatically stored in the Netlify Client Database.
+        </p>
+      </div>
+
+      <!-- Netlify-Connected Form Card -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-800">
+
+        <!-- Success Notification State (Hidden by default) -->
+        <div id="success-banner" class="hidden mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs">
+          <div class="font-bold text-sm text-emerald-300 flex items-center space-x-2 mb-1">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            <span>Message Successfully Stored!</span>
+          </div>
+          <p>Thank you for reaching out. Your submission has been securely recorded in the Netlify Forms database and dispatched to Priyanshu.</p>
+        </div>
+
+        <!-- The Netlify Form -->
+        <form 
+          name="contact" 
+          method="POST" 
+          data-netlify="true" 
+          netlify-honeypot="bot-field" 
+          id="client-form" 
+          class="space-y-4"
+        >
+          <!-- Netlify Required Hidden Form Name Input -->
+          <input type="hidden" name="form-name" value="contact">
+
+          <!-- Netlify Honeypot Anti-Spam Field -->
+          <p class="hidden">
+            <label>Don’t fill this out if you're human: <input name="bot-field"></label>
+          </p>
+
+          <!-- 1. Full Name / Recruiter Name -->
+          <div>
+            <label for="form-name-input" class="block text-xs font-semibold text-slate-300 mb-1">
+              Your Name / Recruiter Name <span class="text-blue-400">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="name" 
+              id="form-name-input" 
+              required 
+              placeholder="e.g. Sarah Jenkins" 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 2. Work Email -->
+          <div>
+            <label for="form-email-input" class="block text-xs font-semibold text-slate-300 mb-1">
+              Work Email Address <span class="text-blue-400">*</span>
+            </label>
+            <input 
+              type="email" 
+              name="email" 
+              id="form-email-input" 
+              required 
+              placeholder="sarah@company.com" 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 3. Company or Organization -->
+          <div>
+            <label for="form-company-input" class="block text-xs font-semibold text-slate-300 mb-1">
+              Company / Startup / Institution
+            </label>
+            <input 
+              type="text" 
+              name="company" 
+              id="form-company-input" 
+              placeholder="e.g. Acme AI, Stealth Startup, or Open Source Org" 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+            >
+          </div>
+
+          <!-- 4. Opportunity / Inquiry Type -->
+          <div>
+            <label for="form-type-select" class="block text-xs font-semibold text-slate-300 mb-1">
+              Inquiry / Opportunity Type
+            </label>
+            <select 
+              name="opportunity_type" 
+              id="form-type-select" 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+            >
+              <option value="Winter/Spring 2026-27 Internship">Winter / Spring 2026–27 Internship (1st Year / 1st Sem)</option>
+              <option value="Software Engineering Role">Software Engineering Role (Full-Stack / Backend)</option>
+              <option value="Applied AI / ML Project">Applied AI / LLM Project Collaboration</option>
+              <option value="Freelance / Client Contract">Freelance / Client Contract Development</option>
+              <option value="Other Inquiry">Other Inquiry / Mentorship</option>
+            </select>
+          </div>
+
+          <!-- 5. Message Note -->
+          <div>
+            <label for="form-message-input" class="block text-xs font-semibold text-slate-300 mb-1">
+              Opportunity Details / Project Note <span class="text-blue-400">*</span>
+            </label>
+            <textarea 
+              name="message" 
+              id="form-message-input" 
+              rows="4" 
+              required 
+              placeholder="Tell me about your tech stack, problem space, or timeline..." 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+            ></textarea>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+            <button 
+              type="submit" 
+              id="submit-btn" 
+              class="w-full sm:flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/25 transition-all text-center flex items-center justify-center space-x-2"
+            >
+              <span>Submit to Netlify Database</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+            <button 
+              type="button" 
+              id="copy-direct-btn" 
+              class="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors"
+            >
+              Copy Direct Email
+            </button>
+          </div>
+
+          <div class="text-[11px] text-slate-500 text-center pt-2">
+            Submissions are encrypted and stored in Netlify Forms. No backend server required.
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact Info Footer Snippet -->
+      <div class="mt-8 text-center text-xs text-slate-500 space-y-1">
+        <div>
+          Direct Email: <a href="mailto:priyanshubhatta2007@gmail.com" class="text-slate-300 underline">priyanshubhatta2007@gmail.com</a> &nbsp;|&nbsp;
+          Phone: <span class="text-slate-300">+91 8250731670</span>
+        </div>
+        <div>
+          LinkedIn: <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="text-blue-400 underline">linkedin.com/in/priyanshubhatta69</a> &nbsp;|&nbsp;
+          GitHub: <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="text-blue-400 underline">github.com/Priyanshu568</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto px-4">
+      &copy; 2026 Priyanshu Bhatta &bull; 1st Year B.Tech CSE (AI/ML &amp; Cloud Computing) &bull; Netlify Forms Client Database
+    </div>
+  </footer>
+
+  <!-- Script for AJAX Netlify Submission & Toast -->
+  <script>
+    const TOAST = document.getElementById('toast');
+    const TOAST_MSG = document.getElementById('toast-msg');
+
+    function showToast(message) {
+      if (!TOAST || !TOAST_MSG) return;
+      TOAST_MSG.textContent = message;
+      TOAST.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+      setTimeout(() => {
+        TOAST.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Back home button
+    const backBtn = document.getElementById("back-home-btn");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "index.html";
+        }
+      });
+    }
+
+    // Direct Email Copy Button
+    const copyDirectBtn = document.getElementById('copy-direct-btn');
+    if (copyDirectBtn) {
+      copyDirectBtn.addEventListener('click', () => {
+        const email = 'priyanshubhatta2007@gmail.com';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(() => {
+            showToast('Copied ' + email + ' to clipboard!');
+          }).catch(() => fallbackCopy(email));
+        } else {
+          fallbackCopy(email);
+        }
+      });
+    }
+
+    function fallbackCopy(text) {
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showToast('Copied ' + text + ' to clipboard!');
+      } catch (err) {
+        showToast('Direct email: ' + text);
+      }
+    }
+
+    // Netlify AJAX Submission
+    const clientForm = document.getElementById('client-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successBanner = document.getElementById('success-banner');
+
+    if (clientForm) {
+      clientForm.addEventListener('submit', function (event) {
+        // If hosted on Netlify, submit via fetch to keep user on the page
+        const isNetlify = window.location.hostname.includes('netlify.app') || window.location.hostname === 'localhost';
+        
+        if (isNetlify) {
+          event.preventDefault();
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Storing in Database...';
+          }
+
+          const formData = new FormData(clientForm);
+          const encodedData = new URLSearchParams(formData).toString();
+
+          fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: encodedData
+          })
+          .then(function (response) {
+            if (response.ok) {
+              if (successBanner) successBanner.classList.remove('hidden');
+              showToast('Success! Stored in Netlify Forms database.');
+              clientForm.reset();
+            } else {
+              throw new Error('Netlify form submission failed');
+            }
+          })
+          .catch(function (error) {
+            console.warn('[Netlify Form] AJAX dispatch failed, falling back to standard submit:', error);
+            // Fallback: standard POST submission
+            clientForm.submit();
+          })
+          .finally(function () {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<span>Submit to Netlify Database</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>';
+            }
+          });
+        }
+        // If not running on netlify or localhost, standard form submission occurs
+      });
+    }
+  </script>
+</body>
+</html>
