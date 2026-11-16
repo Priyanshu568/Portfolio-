@@ -1,864 +1,955 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Priyanshu Bhatta - Developer Portfolio | 1st Year CSE (AI/ML)</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              800: '#1e40af',
-              900: '#1e3a8a',
-              950: '#0f172a',
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            serif: ['Georgia', 'Cambria', 'Liberation Serif', 'serif'],
-          }
-        }
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priyanshu Bhatta | Frontend & Backend Developer | AI & Cloud Engineer</title>
+  <meta name="description" content="Portfolio of Priyanshu Bhatta — B.Tech CSE (AI/ML & Cloud Computing) Undergraduate at Swami Vivekananda University, Freelance Full-Stack & AI Developer, and Google Cloud Certified Builder." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Scoped Styles for PortfolioDB Local Database Inspector Modal */
+    .db-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 14, 0.82);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
     }
 
-    // Form Specs Modal Logic
-    const formSpecsModal = document.getElementById('form-specs-modal');
-    const openFormSpecsBtn = document.getElementById('open-form-modal-btn');
-    const closeFormSpecsBtn = document.getElementById('close-form-specs-modal-btn');
-    const closeFormSpecsBottomBtn = document.getElementById('close-form-specs-bottom-btn');
-
-    if (openFormSpecsBtn && formSpecsModal) {
-      openFormSpecsBtn.addEventListener('click', () => {
-        formSpecsModal.classList.remove('opacity-0', 'pointer-events-none');
-      });
+    .db-modal-backdrop.open {
+      display: flex;
     }
 
-    [closeFormSpecsBtn, closeFormSpecsBottomBtn].forEach(btn => {
-      if (btn && formSpecsModal) {
-        btn.addEventListener('click', () => {
-          formSpecsModal.classList.add('opacity-0', 'pointer-events-none');
-        });
-      }
-    });
-
-    if (formSpecsModal) {
-      formSpecsModal.addEventListener('click', (e) => {
-        if (e.target === formSpecsModal) {
-          formSpecsModal.classList.add('opacity-0', 'pointer-events-none');
-        }
-      });
+    .db-modal {
+      width: 100%;
+      max-width: 720px;
+      max-height: 84vh;
+      overflow-y: auto;
+      background: #0b1121;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 1.85rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
     }
 
-  </script>
-  <link rel="stylesheet" href="style.css">
+    .db-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .db-modal-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+    }
+
+    .db-entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .db-entry-card {
+      padding: 1rem 1.15rem;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      font-size: 0.88rem;
+    }
+
+    .db-entry-top {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .db-entry-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #38bdf8;
+    }
+
+    .db-toast {
+      margin-top: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: #34d399;
+      min-height: 1.2rem;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased transition-colors duration-300">
+<body>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <canvas id="neuralCanvas" aria-hidden="true"></canvas>
 
-  <!-- Floating Toast Notification -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-blue-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none">
-    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-    <span id="toast-msg" class="text-sm font-semibold">Notification</span>
-  </div>
-
-  <!-- Navigation Bar -->
-  <nav class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="#hero" class="flex items-center space-x-3">
-        <span class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">PB</span>
-        <div>
-          <span class="font-bold text-lg text-slate-100 tracking-tight">Priyanshu Bhatta</span>
-          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">1st Year CSE (AI/ML)</span>
-        </div>
+  <!-- Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="brand">
+        <span class="brand-dot"></span>
+        <span>Priyanshu<span class="accent">.dev</span></span>
       </a>
 
-      <!-- Desktop Navigation Links -->
-      <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
-        <a href="#advantage" class="hover:text-blue-400 transition-colors">1st Sem Advantage</a>
-        <a href="#projects" class="hover:text-blue-400 transition-colors">Projects</a>
-        <a href="#skills" class="hover:text-blue-400 transition-colors">Skills</a>
-        <a href="#hackathons" class="hover:text-blue-400 transition-colors">Hackathons</a>
-        <a href="#certifications" class="hover:text-blue-400 transition-colors">Certifications</a>
-        <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
-      </div>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#certifications" class="nav-link">Credentials</a>
+        <a href="#resume" class="nav-link">Resume</a>
+        <a href="#contact" class="nav-btn">Let's Connect</a>
+      </nav>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center space-x-3">
-        <button id="theme-toggle" class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors" title="Toggle Theme">
-          <svg id="theme-icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-          <svg id="theme-icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-        </button>
-        <button id="quick-copy-email-btn" class="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition-colors border border-slate-700">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-          <span>Copy Email</span>
-        </button>
-        <a href="#contact" class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-600/20 transition-all">
-          Hire Me
-        </a>
-      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-  </nav>
+  </header>
 
-  <!-- Hero Section -->
-  <section id="hero" class="relative pt-16 pb-20 overflow-hidden">
-    <!-- Background Glow Elements -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="hero section">
+      <div class="container hero-grid">
+        <div class="hero-content" data-reveal>
+          <div class="status-pill">
+            <span class="pulse-ring"></span>
+            <span>Open to SDE, AI/ML &amp; Cloud Roles &bull; Freelancing @ Upwork</span>
+          </div>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-      <!-- 1st Year Badge -->
-      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-6">
-        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-        <span>1st Year / 1st Semester CSE (AI/ML &amp; Cloud) Undergraduate</span>
-        <span class="text-slate-500">•</span>
-        <span class="text-slate-300">Swami Vivekananda University, Kolkata</span>
-      </div>
+          <h1 class="hero-title">
+            Hi, I'm <span class="gradient-text">Priyanshu Bhatta</span>
+          </h1>
 
-      <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-100 mb-6 leading-tight">
-        Building Production Systems <br class="hidden sm:inline">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-300">
-          Ahead of the Curve
-        </span>
-      </h1>
+          <div class="typewriter-wrapper">
+            <span class="mono-prefix">&gt;_</span>
+            <span id="typewriterText" class="typewriter-text"></span>
+            <span class="cursor-blink">|</span>
+          </div>
 
-      <!-- Subtitle & Pitch -->
-      <p class="max-w-3xl mx-auto text-base sm:text-lg text-slate-400 mb-8 leading-relaxed">
-        I am a 1st-semester Computer Science undergraduate actively seeking my <strong class="text-slate-200">first software engineering or AI/ML internship</strong>. While most 1st-year students are just starting introductory syntax, I have already shipped 5 full-stack and applied AI systems, built polyglot microservices (Python, C++, Java, Node.js), earned 3 Google Cloud Skill Badges with 100% lab scores, and represented ISRO &amp; Govt. of India scholarship programs.
-      </p>
-
-      <!-- Key Call-to-Action Buttons -->
-      <div class="flex flex-wrap items-center justify-center gap-4 mb-10">
-        <a href="#projects" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-600/25 transition-all flex items-center space-x-2">
-          <span>Explore Shipped Projects</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        </a>
-        <button id="open-resume-modal-btn" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition-all flex items-center space-x-2">
-          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          <span>View Resume / CV</span>
-        </button>
-        <a href="#contact" class="px-6 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 font-semibold text-sm border border-slate-800 transition-all">
-          Get in Touch
-        </a>
-      </div>
-
-      <!-- Quick Verified Links Bar -->
-      <div class="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
-        <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="hover:text-blue-400 flex items-center space-x-1.5 transition-colors">
-          <svg class="w-4 h-4 fill-current text-blue-500" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          <span>LinkedIn</span>
-        </a>
-        <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="hover:text-blue-400 flex items-center space-x-1.5 transition-colors">
-          <svg class="w-4 h-4 fill-current text-slate-300" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          <span>GitHub</span>
-        </a>
-        <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noreferrer" class="hover:text-blue-400 flex items-center space-x-1.5 transition-colors">
-          <span class="font-bold text-blue-400">D</span>
-          <span>Devpost Portfolio</span>
-        </a>
-        <a href="https://www.skills.google/public_profiles/c4a7e248-7ee7-41e9-8c41-c644f7431ccd" target="_blank" rel="noreferrer" class="hover:text-blue-400 flex items-center space-x-1.5 transition-colors">
-          <span class="text-blue-400">☁</span>
-          <span>Google Cloud Skills Profile</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 1st Semester Competitive Advantage Scorecard -->
-  <section id="advantage" class="py-16 bg-slate-900/50 border-y border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-2xl sm:text-3xl font-bold text-slate-100 mb-3">Why Hire a 1st-Semester Intern?</h2>
-        <p class="text-sm text-slate-400">
-          Hiring early means acquiring hungry, high-velocity talent before the crowd. Here is the verified baseline I bring to your team on Day 1:
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Card 1 -->
-        <div class="glass-card rounded-2xl p-6 border-t-2 border-t-blue-500">
-          <div class="text-3xl font-extrabold text-blue-400 mb-1">5+</div>
-          <div class="text-sm font-semibold text-slate-200 mb-2">Shipped Production Systems</div>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Full-stack React/Node civic platforms, polyglot AI backends in Python/C++/Java, and master data validation engines.
+          <p class="hero-description">
+            Computer Science &amp; Engineering (AI/ML &amp; Cloud Computing) undergraduate at <strong>Swami Vivekananda University</strong>. I build responsive web interfaces, scalable RESTful backends, and autonomous AI agent systems—shipping civic, social, and enterprise solutions while delivering freelance MVPs on <strong>Upwork</strong>.
           </p>
-        </div>
 
-        <!-- Card 2 -->
-        <div class="glass-card rounded-2xl p-6 border-t-2 border-t-indigo-500">
-          <div class="text-3xl font-extrabold text-indigo-400 mb-1">100%</div>
-          <div class="text-sm font-semibold text-slate-200 mb-2">Google Cloud Lab Scores</div>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Hands-on mastery in Cloud IAM, custom YAML security roles, Compute Engine VMs, persistent disks, and Gemini Enterprise.
-          </p>
-        </div>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">
+              <span>Explore Projects</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="resume.html" class="btn btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>ATS Resume</span>
+            </a>
+            <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="GitHub" title="GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            </a>
+            <a href="https://leetcode.com/u/morningstar_69" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="LeetCode" title="LeetCode (@morningstar_69)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>
+            </a>
+            <a href="https://x.com/prithbat" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="X (Twitter)" title="X (@prithbat)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
 
-        <!-- Card 3 -->
-        <div class="glass-card rounded-2xl p-6 border-t-2 border-t-cyan-500">
-          <div class="text-3xl font-extrabold text-cyan-400 mb-1">3x</div>
-          <div class="text-sm font-semibold text-slate-200 mb-2">Hackathon Leadership</div>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Led team at IEM Kolkata ORBION 8-hour hackathon, designed Schneider Electric Yuva Yodha project, and built for BHARAT AGENTIC 2026.
-          </p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="glass-card rounded-2xl p-6 border-t-2 border-t-emerald-500">
-          <div class="text-3xl font-extrabold text-emerald-400 mb-1">0 Days</div>
-          <div class="text-sm font-semibold text-slate-200 mb-2">Tooling Ramp-Up Needed</div>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Comfortable with Git workflows, Linux environments, RESTful API conventions, automated unit tests, and relational databases.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects Showcase Section -->
-  <section id="projects" class="py-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
-        <div>
-          <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Real-World Engineering</span>
-          <h2 class="text-3xl font-bold text-slate-100 mt-1">Featured Projects &amp; Repositories</h2>
-        </div>
-
-        <!-- Filter Tabs -->
-        <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
-          <button class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white" data-filter="all">All (5)</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="fullstack">Full-Stack (3)</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="ai">AI &amp; Agents (3)</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="systems">Systems &amp; Data (2)</button>
-        </div>
-      </div>
-
-      <!-- Projects Grid -->
-      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- Project 1: CivicPulse -->
-        <div class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10" data-category="fullstack">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">Full-Stack &amp; Geospatial</span>
-              <span class="text-xs text-slate-400">React • Node.js</span>
+          <div class="hero-metrics">
+            <div class="metric-item">
+              <span class="metric-value">6+</span>
+              <span class="metric-label">Full-Stack &amp; AI Systems</span>
             </div>
-            <h3 class="text-lg font-bold text-slate-100 mb-2">CivicPulse</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              Mobile-first hyperlocal municipal issue tracker and geotagged complaint routing platform with automated image verification to streamline community reporting.
+            <div class="metric-divider"></div>
+            <div class="metric-item">
+              <span class="metric-value">17+</span>
+              <span class="metric-label">Google Cloud &amp; AI Badges</span>
+            </div>
+            <div class="metric-divider"></div>
+            <div class="metric-item">
+              <span class="metric-value">4+</span>
+              <span class="metric-label">National &amp; Global Hackathons</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animated Terminal Profile Card -->
+        <div class="hero-visual" data-reveal data-delay="150">
+          <div class="terminal-card spotlight-card">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="terminal-title">priyanshu@svu-aiml-cloud:~</span>
+            </div>
+            <div class="terminal-body">
+              <pre><code><span class="code-comment">// Verified Developer &amp; Cloud Profile</span>
+<span class="code-keyword">const</span> <span class="code-var">developer</span> = {
+  <span class="code-prop">name</span>: <span class="code-str">"Priyanshu Bhatta"</span>,
+  <span class="code-prop">role</span>: <span class="code-str">"Frontend &amp; Backend | AI &amp; Cloud Engineer"</span>,
+  <span class="code-prop">degree</span>: <span class="code-str">"B.Tech CSE (AI/ML &amp; Cloud) '30"</span>,
+  <span class="code-prop">location</span>: <span class="code-str">"Kolkata / Ranaghat, WB, India"</span>,
+  <span class="code-prop">languages</span>: [<span class="code-str">"Python"</span>, <span class="code-str">"JS/TS"</span>, <span class="code-str">"Java"</span>, <span class="code-str">"C++"</span>, <span class="code-str">"SQL"</span>],
+  <span class="code-prop">cloudAI</span>: [
+    <span class="code-str">"GCP (Vision, Speech, Storage, IAM)"</span>,
+    <span class="code-str">"Google AI Studio &amp; Gemini Enterprise"</span>,
+    <span class="code-str">"ISRO-IIRS Geodata ML"</span>
+  ],
+  <span class="code-prop">handles</span>: {
+    <span class="code-prop">github</span>: <span class="code-str">"Priyanshu568"</span>,
+    <span class="code-prop">leetcode</span>: <span class="code-str">"morningstar_69"</span>,
+    <span class="code-prop">devpost</span>: <span class="code-str">"Priyanshu568"</span>
+  }
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About & Education Bento Section -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">01 // OVERVIEW</span>
+          <h2 class="section-title">Engineering Intelligence &amp; Academic Foundation</h2>
+        </div>
+
+        <div class="bento-grid">
+          <article class="bento-card spotlight-card bento-wide" data-reveal>
+            <h3>Who I Am</h3>
+            <p>
+              I build end-to-end digital products combining <strong>responsive frontend UIs</strong>, <strong>scalable backend APIs</strong>, and <strong>applied agentic AI</strong>. From architecting <strong>CivicPulse</strong> (geospatial municipal issue router) and <strong>Orbyt</strong> (polyglot AI social network with a C++ moderation microservice and Java recommendation engine) to building <strong>MDR Validator</strong> and <strong>ShopDesk AI</strong>, I focus on clean architecture and measurable utility.
             </p>
-            <div class="flex flex-wrap gap-1.5 mb-5">
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">React.js</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Tailwind CSS</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Node.js</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Leaflet.js</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Image ML</span>
-            </div>
-          </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <button class="project-modal-trigger text-blue-400 hover:text-blue-300 flex items-center space-x-1" data-project="civicpulse">
-              <span>Inspect Architecture</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            <div class="flex items-center space-x-3">
-              <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="GitHub Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="LinkedIn Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project 2: AI Social Media (Orbyt) -->
-        <div class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10" data-category="fullstack systems">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Polyglot Architecture</span>
-              <span class="text-xs text-slate-400">Python • C++ • Java</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-100 mb-2">AI Social Media (Orbyt)</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              Multi-language platform combining a responsive HTML5/CSS3/JS web UI with a Python backend, dual SQLite databases, high-speed C++ content moderation, and Java recommendation engine.
+            <p>
+              Currently a 1st-year B.Tech CSE (AI/ML &amp; Cloud Computing) student at <strong>Swami Vivekananda University</strong>, active member of <strong>Developer Student Club (DSC) CUSIT</strong>, Internshala Student Partner, and freelance developer on <strong>Upwork</strong>.
             </p>
-            <div class="flex flex-wrap gap-1.5 mb-5">
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Python (main.py)</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">C++ (moderate.cpp)</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Java (Suggest.java)</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">SQLite</span>
+            <div class="tag-row">
+              <span class="pill">English</span>
+              <span class="pill">Bengali</span>
+              <span class="pill">Hindi</span>
+              <span class="pill">DSC CUSIT Member</span>
+              <span class="pill">Upwork Freelancer</span>
+              <span class="pill">Saratpally, Ranaghat (741201)</span>
+            </div>
+          </article>
+
+          <article class="bento-card spotlight-card" data-reveal data-delay="100">
+            <div class="card-icon">🎓</div>
+            <h3>Education</h3>
+            <div class="edu-list">
+              <div class="edu-item">
+                <span class="edu-year">July 2026 – July 2030 (1st Year, Sem 1)</span>
+                <h4>Swami Vivekananda University</h4>
+                <p>B.Tech in Computer Science &amp; Engineering (AI/ML &amp; Cloud Computing)</p>
+              </div>
+              <div class="edu-item">
+                <span class="edu-year">April 2025 – May 2026</span>
+                <h4>JRS Public School &amp; Satish Chandra Memorial School</h4>
+                <p>Higher Secondary (Class XII, CBSE — PCM Science)</p>
+              </div>
+              <div class="edu-item">
+                <span class="edu-year">April 2023 – May 2024</span>
+                <h4>Satish Chandra Memorial School</h4>
+                <p>Secondary Education (Class X, CBSE)</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Skills Section -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">02 // TECH STACK</span>
+          <h2 class="section-title">Technical &amp; Certification-Level Arsenal</h2>
+        </div>
+
+        <div class="skills-tabs" data-reveal>
+          <button type="button" class="skill-tab active" data-skill-cat="all">All Capabilities</button>
+          <button type="button" class="skill-tab" data-skill-cat="languages">Languages &amp; Core</button>
+          <button type="button" class="skill-tab" data-skill-cat="web">Full-Stack &amp; Web</button>
+          <button type="button" class="skill-tab" data-skill-cat="ai-cloud">AI, Cloud &amp; Geospatial</button>
+        </div>
+
+        <div class="skills-grid" id="skillsGrid" data-reveal data-delay="100"></div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">03 // FEATURED WORK</span>
+          <h2 class="section-title">Engineered Systems &amp; Prototypes</h2>
+        </div>
+
+        <div class="filter-bar" data-reveal>
+          <button type="button" class="filter-btn active" data-filter="all">All Projects (6)</button>
+          <button type="button" class="filter-btn" data-filter="ai">AI &amp; Agents</button>
+          <button type="button" class="filter-btn" data-filter="fullstack">Full-Stack &amp; Civic</button>
+          <button type="button" class="filter-btn" data-filter="enterprise">Enterprise &amp; Data</button>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+          <!-- Project 1: CivicPulse -->
+          <article class="project-card spotlight-card tilt-card" data-category="fullstack ai" data-reveal>
+            <div>
+              <div class="project-top">
+                <span class="project-badge">Geospatial + AI</span>
+                <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View CivicPulse on GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>CivicPulse</h3>
+              <p>
+                Mobile-first hyperlocal municipal issue tracker and geospatial routing engine combining Leaflet.js and Mappls mapping with automated image classification and Node.js/Express.js REST APIs to verify and route geotagged civic complaints.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>React.js</span>
+              <span>Tailwind CSS</span>
+              <span>Node.js</span>
+              <span>Leaflet / Mappls</span>
+            </div>
+          </article>
+
+          <!-- Project 2: Orbyt -->
+          <article class="project-card spotlight-card tilt-card" data-category="fullstack ai" data-reveal data-delay="60">
+            <div>
+              <div class="project-top">
+                <span class="project-badge">Polyglot AI Social</span>
+                <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View Orbyt on GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>Orbyt (AI Social Media)</h3>
+              <p>
+                Multi-language AI social networking platform uniting an HTML5/CSS3/JS frontend with a Python backend, dual SQLite databases (social.db, orbyt.db), a C++ real-time content moderation microservice, and a Java feed recommendation engine.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>Python</span>
+              <span>C++</span>
+              <span>Java</span>
+              <span>SQLite</span>
+            </div>
+          </article>
+
+          <!-- Project 3: MDR Validator -->
+          <article class="project-card spotlight-card tilt-card" data-category="enterprise" data-reveal data-delay="120">
+            <div>
+              <div class="project-top">
+                <span class="project-badge">Data Engineering</span>
+                <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View MDR Validator on GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>MDR Validator (mdr_validator)</h3>
+              <p>
+                Configuration-driven Master Data Validation Engine governed by declarative YAML rules (settings.yaml, mappings.yaml), featuring data normalizers, multi-source connectors, automated reporting, and unit tests.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>Python</span>
+              <span>YAML Schemas</span>
+              <span>Data Pipelines</span>
+              <span>Automated Testing</span>
+            </div>
+          </article>
+
+          <!-- Project 4: ShopDesk AI -->
+          <article class="project-card spotlight-card tilt-card" data-category="ai fullstack" data-reveal>
+            <div>
+              <div class="project-top">
+                <span class="project-badge">Agentic AI &bull; Devpost</span>
+                <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View ShopDesk AI on Devpost">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>ShopDesk AI</h3>
+              <p>
+                Autonomous e-commerce customer support and escalation platform built for the Build, Ship, Shape: Amazon Developer Hackathon on Devpost with automated inquiry resolution and context-preserving human handoff.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>Agentic AI</span>
+              <span>Python</span>
+              <span>Node.js</span>
+              <span>LLM APIs</span>
+            </div>
+          </article>
+
+          <!-- Project 5: AI Energy Copilot -->
+          <article class="project-card spotlight-card tilt-card" data-category="ai" data-reveal data-delay="60">
+            <div>
+              <div class="project-top">
+                <span class="project-badge">ClimateTech AI</span>
+                <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View AI Energy Copilot on GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>AI Energy Copilot</h3>
+              <p>
+                Smart electricity bill analyzer and consumption predictor built for Schneider Electric's Yuva Yodha Energy Tech Hackathon to generate itemized appliance breakdowns, next-month usage forecasts, and conservation tips.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>Python</span>
+              <span>Predictive Analytics</span>
+              <span>Web Dashboard</span>
+              <span>Applied AI</span>
+            </div>
+          </article>
+
+          <!-- Project 6: Enterprise Facility & SLA Ticketing System -->
+          <article class="project-card spotlight-card tilt-card" data-category="enterprise fullstack" data-reveal data-delay="120">
+            <div>
+              <div class="project-top">
+                <span class="project-badge">Enterprise Backend</span>
+                <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer" class="project-ext" aria-label="View Enterprise Facility System on GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+              <h3>Enterprise Facility &amp; SLA Ticketing System</h3>
+              <p>
+                Role-based operational maintenance and SLA-tracked incident management platform engineered with structured PostgreSQL/SQL schemas, priority routing workflows, and verifiable audit trails.
+              </p>
+            </div>
+            <div class="tech-stack">
+              <span>Node.js</span>
+              <span>Express.js</span>
+              <span>PostgreSQL</span>
+              <span>REST APIs</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience, Hackathons & Leadership Timeline -->
+    <section id="experience" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">04 // EXPERIENCE &amp; HACKATHONS</span>
+          <h2 class="section-title">Freelance Delivery, Leadership &amp; Hackathons</h2>
+        </div>
+
+        <div class="timeline" id="timeline">
+          <div class="timeline-line" id="timelineLine"></div>
+
+          <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <div class="timeline-card spotlight-card">
+              <span class="timeline-date">October 2026 – Present &bull; Remote</span>
+              <h3>Freelance Full-Stack &amp; AI Developer</h3>
+              <p class="timeline-org">Upwork (Remote)</p>
+              <p>Architecting and deploying full-stack web applications, RESTful APIs, Gemini API integrations, agentic support workflows, and cloud-hosted PostgreSQL MVPs for international clients.</p>
             </div>
           </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <button class="project-modal-trigger text-indigo-400 hover:text-indigo-300 flex items-center space-x-1" data-project="orbyt">
-              <span>Inspect Architecture</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            <div class="flex items-center space-x-3">
-              <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="GitHub Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="LinkedIn Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
+
+          <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <div class="timeline-card spotlight-card">
+              <span class="timeline-date">October 2026 – November 2026 &bull; Global / National</span>
+              <h3>Builder — BHARAT AGENTIC 2026, Nebius x NVIDIA &amp; PromptWars Virtual</h3>
+              <p class="timeline-org">AIKart, Devpost &amp; Hack2Skill</p>
+              <p>Built autonomous multi-step tool-using AI agents during the 12-hour BHARAT AGENTIC 2026 hackathon, shipped ShopDesk AI on Devpost, and developed full-stack AI MVPs for Nebius x NVIDIA and PromptWars Virtual.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <div class="timeline-card spotlight-card">
+              <span class="timeline-date">September 2026 – October 2026 &bull; Kolkata, India</span>
+              <h3>Team Leader — ORBION: 8-Hour Hackathon (Tech Kurukshetra '26)</h3>
+              <p class="timeline-org">Institute of Engineering and Management (IEM), Kolkata (via Unstop)</p>
+              <p>Recruited and led a cross-functional student engineering squad during IEM Kolkata's 8-hour sprint, directing system architecture, rapid full-stack prototyping, and technical pitch delivery.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <div class="timeline-card spotlight-card">
+              <span class="timeline-date">September 2026 – October 2026 &bull; National</span>
+              <h3>Innovator — Yuva Yodha Energy Tech Hackathon 2026</h3>
+              <p class="timeline-org">Schneider Electric (Hosted on YouNoodle)</p>
+              <p>Designed and submitted the AI Energy Copilot architecture targeting household electricity bill analytics and predictive load optimization.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-reveal>
+            <div class="timeline-dot"></div>
+            <div class="timeline-card spotlight-card">
+              <span class="timeline-date">August 2026 – Present &bull; Kolkata, West Bengal</span>
+              <h3>Student Campus Promoter &amp; DSC CUSIT Member</h3>
+              <p class="timeline-org">Internshala Trainings &amp; Developer Student Club CUSIT (Powered by Google Developers)</p>
+              <p>Mentoring student cohorts on technical internships and Full-Stack Web Development with AI while contributing to GDG on Campus and Google Cloud Learn with Communities.</p>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Project 3: MDR Validator -->
-        <div class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-category="systems">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Data &amp; Testing Engine</span>
-              <span class="text-xs text-slate-400">Python • YAML</span>
+    <!-- Certifications & Verified Skill Badges -->
+    <section id="certifications" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">05 // CREDENTIALS</span>
+          <h2 class="section-title">Verified Google Cloud &amp; Coursera Certifications</h2>
+        </div>
+
+        <div class="filter-bar" id="certFilterBar" data-reveal>
+          <button type="button" class="cert-filter-btn active" data-cert-filter="all">All Credentials (17+)</button>
+          <button type="button" class="cert-filter-btn" data-cert-filter="gcp">Google Cloud Skills</button>
+          <button type="button" class="cert-filter-btn" data-cert-filter="coursera">Coursera &amp; Google AI</button>
+          <button type="button" class="cert-filter-btn" data-cert-filter="programs">ISRO &amp; National Fellowships</button>
+        </div>
+
+        <div class="certs-grid" id="certsGrid">
+          <!-- Nov 15, 2026 GCP Cloud Vision API Skill Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal>
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Nov 15, 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>Analyze Images with the Cloud Vision API Skill Badge</h4>
+              <p>Computer vision pipelines for OCR text extraction, label classification, and face &amp; landmark detection in images.</p>
             </div>
-            <h3 class="text-lg font-bold text-slate-100 mb-2">MDR Validator (<code class="text-emerald-400">mdr_validator</code>)</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              Configuration-driven master data and schema validation framework with declarative YAML mappings, data normalizers, database connectors, and automated test reports.
+            <a href="https://www.credly.com/go/fImRn2Gge8A1849E98XXlQ" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+              Verify on Credly &nearr;
+            </a>
+          </div>
+
+          <!-- Nov 15, 2026 GCP Speech API Skill Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Nov 15, 2026</span>
+                <span class="cert-score-tag">Skill Badge</span>
+              </div>
+              <h4>Using the Google Cloud Speech API</h4>
+              <p>Building Speech-to-Text API requests and automated audio-to-text transcription workflows on Google Cloud.</p>
+            </div>
+            <a href="https://www.credly.com/go/gA59Rnf3Idc3nXIJEQjFJw" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+              Verify on Credly &nearr;
+            </a>
+          </div>
+
+          <!-- Nov 13, 2026 GCP Skill Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="120">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Nov 13, 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>Store, Process, and Manage Data on Google Cloud</h4>
+              <p>Cloud Storage bucket administration, event-driven Cloud Functions, and Cloud Pub/Sub messaging workflows.</p>
+            </div>
+            <a href="https://www.credly.com/go/Ih7X0eZE9Wxoz6V0qHtTIQ" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+              Verify on Credly &nearr;
+            </a>
+          </div>
+
+          <!-- Nov 12, 2026 GCP AI Studio Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal>
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Nov 12, 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>Develop AI-Powered Prototypes in Google AI Studio</h4>
+              <p>System prompt engineering, multimodal image/video analysis, and API-key generative AI prototyping.</p>
+            </div>
+            <a href="https://www.credly.com/go/kFCQa6zQvMeA4awEbDkEQA" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+              Verify on Credly &nearr;
+            </a>
+          </div>
+
+          <!-- Nov 12, 2026 GCP Speech & Language Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Nov 12, 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>Implement Speech and Language Solutions with Pre-trained APIs</h4>
+              <p>Speech-to-Text transcription, Text-to-Speech synthesis, and Cloud Natural Language entity/sentiment APIs.</p>
+            </div>
+            <a href="https://www.credly.com/go/GrInb6kGb8mbxBYAkvvtgw" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+              Verify on Credly &nearr;
+            </a>
+          </div>
+
+          <!-- Nov 2026 Coursera 5-Course Specialization -->
+          <div class="cert-card spotlight-card" data-cert-cat="coursera" data-reveal data-delay="120">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google &amp; Coursera &bull; Nov 2026</span>
+                <span class="cert-score-tag">5-Course Specialization</span>
+              </div>
+              <h4>Google AI Essentials Specialization (Verified)</h4>
+              <p>Completed all 5 Career Certificates: Intro to AI, Maximize Productivity With AI Tools, Art of Prompting, Stay Ahead of the AI Curve &amp; Use AI Responsibly.</p>
+            </div>
+            <span class="cert-id-text">IDs: MEQD6YIAY16P &bull; 6HBXWYU77HYQ &bull; VNSOVA9W8ZJB</span>
+          </div>
+
+          <!-- Nov 2026 AI Boost Bootcamp -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp coursera" data-reveal>
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud &bull; Nov 2026</span>
+                <span class="cert-score-tag">Completion Badge</span>
+              </div>
+              <h4>AI Boost Bootcamp: How to Use Gemini at Work 101</h4>
+              <p>Applied enterprise Gemini workspace automation, structured prompting frameworks, and AI productivity pipelines.</p>
+            </div>
+            <span class="cert-id-text">Google Cloud Skills &bull; November 2026</span>
+          </div>
+
+          <!-- Oct 2026 GCP IAM Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Oct 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>Configure Service Accounts and IAM Roles for Google Cloud</h4>
+              <p>Custom YAML IAM roles, service account bindings, gcloud CLI policies, and BigQuery Python client authentication.</p>
+            </div>
+            <span class="cert-id-text">Google Cloud / Credly Verified</span>
+          </div>
+
+          <!-- Oct 2026 GCP Compute Badge -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="120">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud Skills &bull; Oct 2026</span>
+                <span class="cert-score-tag">100% Lab Score</span>
+              </div>
+              <h4>The Basics of Google Cloud Compute</h4>
+              <p>Compute Engine VM provisioning, persistent disk attachment, and Nginx web server deployment.</p>
+            </div>
+            <span class="cert-id-text">Google Cloud / Credly Verified</span>
+          </div>
+
+          <!-- Gemini Enterprise + Coursera Cloud -->
+          <div class="cert-card spotlight-card" data-cert-cat="gcp coursera" data-reveal>
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">Google Cloud &amp; Coursera</span>
+                <span class="cert-score-tag">Multi-Badge</span>
+              </div>
+              <h4>Gemini Enterprise, Cloud Computing &amp; Cloud Security</h4>
+              <p>Deep research agents in Gemini Enterprise/NotebookLM plus Coursera certifications in Generative AI, Cloud Computing &amp; Security.</p>
+            </div>
+            <span class="cert-id-text">Google Cloud Career Launchpad (APAC)</span>
+          </div>
+
+          <!-- National Fellowships -->
+          <div class="cert-card spotlight-card" data-cert-cat="programs" data-reveal data-delay="60">
+            <div>
+              <div class="cert-top">
+                <span class="cert-issuer">ISRO IIRS &bull; Govt. of India</span>
+                <span class="cert-score-tag">National Fellowships</span>
+              </div>
+              <h4>ISRO IIRS Geodata ML &amp; IICT AI Skills House</h4>
+              <p>ISRO IIRS AI/ML for Geodata Analysis (Reg: 20261883026394), IICT AISH Scholar (ID: IICT-16082662223) &amp; Gemini Quizwar 2026.</p>
+            </div>
+            <span class="cert-id-text">ISRO Dehradun &bull; Ministry of I&amp;B</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Resume Section -->
+    <section id="resume" class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-tag">06 // CURRICULUM VITAE</span>
+          <h2 class="section-title">Interactive ATS Resume &amp; PDF Export</h2>
+        </div>
+
+        <div class="resume-showcase spotlight-card" data-reveal>
+          <div class="resume-showcase-top">
+            <div>
+              <span class="resume-format-badge">Updated Nov 2026 &bull; ATS-Optimized Curriculum Vitae</span>
+              <h3>Priyanshu Bhatta &mdash; Official ATS Resume</h3>
+              <p class="resume-subtext">
+                Switch role emphasis below to tailor the live resume snapshot for recruiters, view the interactive web CV, or download the official PDF directly.
+              </p>
+            </div>
+
+            <div class="resume-actions">
+              <a href="resume.html" id="openResumeBtn" class="btn btn-secondary">
+                <span>View Full Web Resume</span>
+              </a>
+              <a href="Priyanshu_Bhatta_Resume.pdf" download="Priyanshu_Bhatta_Resume.pdf" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download PDF Resume</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Role Tailoring Switcher -->
+          <div class="resume-mode-bar">
+            <button type="button" class="resume-mode-btn active" data-resume-mode="default">Frontend &amp; Backend | AI &amp; Cloud</button>
+            <button type="button" class="resume-mode-btn" data-resume-mode="hybrid">Full-Stack &amp; Upwork Freelance</button>
+            <button type="button" class="resume-mode-btn" data-resume-mode="aiml">Applied AI &amp; Google Cloud</button>
+          </div>
+
+          <!-- Live Resume Snapshot Grid -->
+          <div class="resume-preview-box">
+            <div class="resume-preview-header">
+              <div>
+                <h4 id="previewHeadline">Frontend and Backend Developer | AI &amp; Cloud Engineer</h4>
+                <p id="previewSummary">
+                  Computer Science and Engineering (AI/ML &amp; Cloud Computing) undergraduate at Swami Vivekananda University trained in React.js, Tailwind CSS, TypeScript, Python, Java, C++, Node.js, Express.js, and SQL/PostgreSQL. Experienced in shipping end-to-end systems (CivicPulse, Orbyt, MDR Validator, ShopDesk AI) while delivering freelance Upwork solutions and leading national hackathon teams.
+                </p>
+              </div>
+            </div>
+
+            <div class="resume-mini-grid">
+              <div class="resume-mini-col">
+                <h5>Core Stack</h5>
+                <p>Python, Java, JS/TS, C++, SQL/PostgreSQL, React.js, Tailwind CSS, Three.js, Node.js, Express.js, GCP (Vision, Speech, Storage, IAM)</p>
+              </div>
+              <div class="resume-mini-col">
+                <h5>Experience &amp; Systems</h5>
+                <p>Freelance Dev @ Upwork &bull; CivicPulse, Orbyt, MDR Validator, ShopDesk AI, AI Energy Copilot &bull; ORBION, BHARAT AGENTIC &amp; Nebius x NVIDIA</p>
+              </div>
+              <div class="resume-mini-col">
+                <h5>Verified Credentials</h5>
+                <p>Cloud Vision &amp; Speech API Badges &bull; Google AI Essentials (5 Courses) &bull; Google AI Studio &bull; 100% GCP Challenge Labs &bull; ISRO IIRS &amp; IICT AISH</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section (Netlify Forms + PortfolioDB IndexedDB/LocalStorage Sync) -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="contact-wrapper spotlight-card" data-reveal>
+          <div class="contact-info">
+            <span class="section-tag">07 // INITIATE HANDSHAKE</span>
+            <h2>Let's Build Something Impactful</h2>
+            <p>
+              Recruiting for SDE, AI/ML, or Cloud internships, looking for a full-stack freelance engineer on Upwork, or forming a hackathon squad? Send a message below—logged both via Netlify Forms and your local browser database.
             </p>
-            <div class="flex flex-wrap gap-1.5 mb-5">
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">settings.yaml</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">mappings.yaml</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Normalizers</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">PyTest Suite</span>
-            </div>
-          </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <button class="project-modal-trigger text-emerald-400 hover:text-emerald-300 flex items-center space-x-1" data-project="mdr">
-              <span>Inspect Architecture</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            <div class="flex items-center space-x-3">
-              <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="text-emerald-400 hover:text-emerald-300 flex items-center space-x-1" title="GitHub Repository">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                <span>Repo</span>
-              </a>
-              <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="LinkedIn Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
 
-        <!-- Project 4: ShopDesk AI -->
-        <div class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/10" data-category="ai fullstack">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">Agentic AI &amp; E-Commerce</span>
-              <span class="text-xs text-slate-400">Amazon Hackathon</span>
+            <div class="contact-details">
+              <a href="mailto:priyanshubhatta2007@gmail.com" class="contact-item">
+                <span class="contact-icon">✉️</span>
+                <span>priyanshubhatta2007@gmail.com</span>
+              </a>
+              <a href="tel:+918250731670" class="contact-item">
+                <span class="contact-icon">📱</span>
+                <span>+91 8250731670</span>
+              </a>
+              <div class="contact-item">
+                <span class="contact-icon">📍</span>
+                <span>Saratpally, Ranaghat, Kolkata / Nadia, WB 741201</span>
+              </div>
             </div>
-            <h3 class="text-lg font-bold text-slate-100 mb-2">ShopDesk AI</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              Autonomous agentic e-commerce customer support system shipped for Devpost's Amazon Developer Hackathon featuring automatic intent classification and context-preserving human escalation.
+
+            <div style="margin-top: 1.75rem;">
+              <button type="button" id="openDbModalBtn" class="btn btn-secondary">
+                <span>View Local Client DB Logs</span>
+              </button>
+            </div>
+          </div>
+
+          <form
+            name="contact"
+            method="POST"
+            action="/form.html"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            class="contact-form"
+            id="contactForm"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="sr-only" aria-hidden="true">
+              <label>Leave this empty: <input name="bot-field" /></label>
             </p>
-            <div class="flex flex-wrap gap-1.5 mb-5">
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Agentic LLMs</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Node.js</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Python</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Escalation Engine</span>
+
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="e.g., Ananya Sharma" required />
             </div>
-          </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <button class="project-modal-trigger text-amber-400 hover:text-amber-300 flex items-center space-x-1" data-project="shopdesk">
-              <span>Inspect Architecture</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            <div class="flex items-center space-x-3">
-              <a href="https://devpost.com/software/shopdesk-ai" target="_blank" rel="noreferrer" class="text-amber-400 hover:text-amber-300 flex items-center space-x-1" title="Devpost Submission">
-                <span>Devpost</span>
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-              </a>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required />
             </div>
-          </div>
-        </div>
 
-        <!-- Project 5: AI Energy Copilot -->
-        <div class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/10" data-category="ai systems">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Predictive AI &amp; Cleantech</span>
-              <span class="text-xs text-slate-400">Schneider Electric</span>
+            <div class="form-group">
+              <label for="company">Company / Organization (Optional)</label>
+              <input type="text" id="company" name="company" placeholder="e.g., Google, Startup, or Freelance Client" />
             </div>
-            <h3 class="text-lg font-bold text-slate-100 mb-2">AI Energy Copilot</h3>
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-              Smart electricity bill analyzer and next-month consumption forecaster architected for Schneider Electric's Yuva Yodha Energy Tech competition.
-            </p>
-            <div class="flex flex-wrap gap-1.5 mb-5">
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Bill OCR &amp; NLP</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Predictive Modeling</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Python</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Web Analytics</span>
-            </div>
-          </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-            <button class="project-modal-trigger text-cyan-400 hover:text-cyan-300 flex items-center space-x-1" data-project="energy">
-              <span>Inspect Architecture</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            <div class="flex items-center space-x-3">
-              <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="GitHub Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="text-slate-400 hover:text-white" title="LinkedIn Profile">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- Technical Skills Breakdown Section -->
-  <section id="skills" class="py-16 bg-slate-900/40 border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Technical Foundation</span>
-        <h2 class="text-3xl font-bold text-slate-100 mt-1">Skills &amp; Technology Matrix</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Frontend -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">UI</div>
-            <div>
-              <h3 class="font-bold text-slate-100 text-base">Frontend Web Development</h3>
-              <p class="text-xs text-slate-400">Trained &amp; Certified in Modern Web Standards</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">HTML5</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">CSS3</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">JavaScript (ES6+)</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">React.js</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Tailwind CSS</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">DOM Manipulation</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Mobile-First UI</span>
-          </div>
-        </div>
-
-        <!-- Backend -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-sm">BE</div>
-            <div>
-              <h3 class="font-bold text-slate-100 text-base">Backend &amp; Database Architecture</h3>
-              <p class="text-xs text-slate-400">APIs, Relational Storage &amp; Microservices</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Python</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Node.js</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Express.js</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Java</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">C++</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">SQL &amp; SQLite</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Supabase (PostgreSQL)</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">RESTful APIs</span>
-          </div>
-        </div>
-
-        <!-- Cloud & DevOps -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">GCP</div>
-            <div>
-              <h3 class="font-bold text-slate-100 text-base">Cloud, DevOps &amp; Infrastructure</h3>
-              <p class="text-xs text-slate-400">Verified Google Cloud Skills &amp; CLI</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Google Cloud Platform</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Compute Engine VMs</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Cloud IAM &amp; Service Accounts</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Custom YAML Roles</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">gcloud CLI</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Git &amp; GitHub</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Render / Vercel</span>
-          </div>
-        </div>
-
-        <!-- AI & Core Engineering -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">AI</div>
-            <div>
-              <h3 class="font-bold text-slate-100 text-base">Applied AI, Data &amp; Core Computer Science</h3>
-              <p class="text-xs text-slate-400">DSA Foundation &amp; Intelligent Workflows</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 text-xs">
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Agentic AI &amp; Deep Research</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Data Structures &amp; Algorithms (DSA)</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">OOP</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">YAML Schema Validation</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Geospatial ML (ISRO-IIRS)</span>
-            <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">Leaflet.js &amp; Mappls</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Hackathons & Leadership Section -->
-  <section id="hackathons" class="py-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Competitive Performance</span>
-        <h2 class="text-3xl font-bold text-slate-100 mt-1">Hackathons &amp; Campus Leadership</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Hackathon 1 -->
-        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-blue-500">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Institute of Engineering &amp; Management (IEM), Kolkata</span>
-            <span>Sept – Oct 2026</span>
-          </div>
-          <h3 class="text-base font-bold text-slate-100 mb-1">Team Leader — ORBION: 8-Hour Hackathon</h3>
-          <p class="text-xs text-slate-400 mb-3">Tech Kurukshetra &rsquo;26 (via Unstop)</p>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Recruited and led a cross-functional student engineering team during IEM Kolkata&rsquo;s intensive 8-hour live hackathon, driving problem formulation, system architecture, rapid UI prototyping, and technical pitch presentation.
-          </p>
-        </div>
-
-        <!-- Hackathon 2 -->
-        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-indigo-500">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Schneider Electric (YouNoodle)</span>
-            <span>Sept – Oct 2026</span>
-          </div>
-          <h3 class="text-base font-bold text-slate-100 mb-1">Innovator — Yuva Yodha Energy Tech Hackathon</h3>
-          <p class="text-xs text-slate-400 mb-3">National Cleantech Competition</p>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Architected and submitted the <strong>AI Energy Copilot</strong> proposal for Schneider Electric&rsquo;s challenge, designing automated electricity bill OCR parsing, appliance-level load forecasting, and conservation analytics.
-          </p>
-        </div>
-
-        <!-- Hackathon 3 -->
-        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-cyan-500">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>AIKart, Devpost &amp; Hack2Skill</span>
-            <span>October 2026</span>
-          </div>
-          <h3 class="text-base font-bold text-slate-100 mb-1">Competitor — BHARAT AGENTIC 2026 &amp; Amazon Hackathon</h3>
-          <p class="text-xs text-slate-400 mb-3">AI Agent Hackathons</p>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Competed in the 12-hour <em>BHARAT AGENTIC 2026</em> AI agent challenge (<em>Understand &rarr; Reason &rarr; Plan &rarr; Use Tools &rarr; Act &rarr; Deliver</em>), shipped <strong>ShopDesk AI</strong> on Devpost, and participated in <em>PromptWars Virtual</em>.
-          </p>
-        </div>
-
-        <!-- Role 4 -->
-        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-emerald-500">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Internshala &amp; Developer Student Club</span>
-            <span>August 2026 – Present</span>
-          </div>
-          <h3 class="text-base font-bold text-slate-100 mb-1">Student Campus Promoter &amp; DSC CUSIT Member</h3>
-          <p class="text-xs text-slate-400 mb-3">Developer Community Leadership</p>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Selected to represent Internshala on campus to mentor student peers on technical internships and Full-Stack Web Development (HTML, CSS, JavaScript, React, Node.js); active contributor in GDG on Campus.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Certifications & Skill Badges Grid -->
-  <section id="certifications" class="py-16 bg-slate-900/40 border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Verified Credentials</span>
-        <h2 class="text-3xl font-bold text-slate-100 mt-1">Certifications &amp; National Programs</h2>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Badge 1 -->
-        <a href="https://www.credly.com/go/3C3934JppjrMDh0QUP9rvg" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-blue-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">100% Lab Score</span>
-            <span class="text-xs text-slate-500 group-hover:text-blue-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-blue-400 transition-colors">Configure Service Accounts &amp; IAM Roles</h4>
-          <p class="text-[11px] text-slate-400">Google Cloud / Credly (Oct 2026)</p>
-        </a>
-
-        <!-- Badge 2 -->
-        <a href="https://www.credly.com/go/8b5XUoeSf00k5JTqAksJvg" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-blue-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">100% Lab Score</span>
-            <span class="text-xs text-slate-500 group-hover:text-blue-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-blue-400 transition-colors">The Basics of Google Cloud Compute</h4>
-          <p class="text-[11px] text-slate-400">Google Cloud / Credly (Oct 2026)</p>
-        </a>
-
-        <!-- Badge 3 -->
-        <a href="https://www.credly.com/go/DlUy0aYms2aJkplpR2RlNQ" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-blue-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Skill Badge</span>
-            <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-indigo-400 transition-colors">Create First Gemini Enterprise App</h4>
-          <p class="text-[11px] text-slate-400">Google Cloud / Credly (Oct 2026)</p>
-        </a>
-
-        <!-- Badge 4 -->
-        <a href="https://mail.google.com/mail/?authuser=priyanshubhatta2007@gmail.com#all/thread-f:1880125901177757424" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-cyan-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Specialization</span>
-            <span class="text-xs text-slate-500 group-hover:text-cyan-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-cyan-400 transition-colors">Google AI Essentials Specialization</h4>
-          <p class="text-[11px] text-slate-400">Google &amp; Coursera (Oct 2026)</p>
-        </a>
-
-        <!-- Badge 5 -->
-        <a href="https://isrolms.iirs.gov.in/" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-emerald-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Govt of India</span>
-            <span class="text-xs text-slate-500 group-hover:text-emerald-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-emerald-400 transition-colors">AI/ML for Geodata Analysis (IIRS)</h4>
-          <p class="text-[11px] text-slate-400">ISRO Dehradun (July 2026)</p>
-        </a>
-
-        <!-- Badge 6 -->
-        <a href="https://iict.org" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-purple-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">Scholarship</span>
-            <span class="text-xs text-slate-500 group-hover:text-purple-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-purple-400 transition-colors">IICT AI Skills House (AISH)</h4>
-          <p class="text-[11px] text-slate-400">Ministry of I&amp;B &amp; Google (2026)</p>
-        </a>
-
-        <!-- Badge 7 -->
-        <a href="https://www.skills.google/public_profiles/c4a7e248-7ee7-41e9-8c41-c644f7431ccd" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-blue-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">Active Track</span>
-            <span class="text-xs text-slate-500 group-hover:text-blue-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-blue-400 transition-colors">Google Cloud Career Launchpad</h4>
-          <p class="text-[11px] text-slate-400">Cloud &amp; Security Pathways</p>
-        </a>
-
-        <!-- Badge 8 -->
-        <a href="https://unstop.com/certificate-preview/12e6dbb5-a2d4-49b2-a674-2a80b1db58fe" target="_blank" rel="noreferrer" class="glass-card rounded-xl p-4 transition-all hover:border-amber-500/50 hover:bg-slate-800/80 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">National</span>
-            <span class="text-xs text-slate-500 group-hover:text-amber-400 transition-colors">&nearr;</span>
-          </div>
-          <h4 class="font-bold text-xs text-slate-200 mb-1 group-hover:text-amber-400 transition-colors">Gemini Quizwar 2026 Top Achiever</h4>
-          <p class="text-[11px] text-slate-400">Devengers / Unstop (6,300+ entries)</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact & Hire Me Section -->
-  <section id="contact" class="py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-4">
-        <span>Available for Winter / Spring 2026-27 Internships</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">Let&rsquo;s Build Something Impactful</h2>
-      <p class="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-10">
-        Whether you are a high-growth startup, an open-source team, or an engineering company looking for a proactive, high-velocity developer who requires zero hand-holding, my inbox is open.
-      </p>
-
-      <div class="glass-card rounded-2xl p-8 max-w-xl mx-auto text-left shadow-2xl">
-        <form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-4">
-          <input type="hidden" name="form-name" value="contact">
-          <p class="hidden" style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
-          
-          <!-- In-Page Success Banner -->
-          <div id="form-success-banner" class="hidden p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-start space-x-3 transition-all duration-300">
-            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <div>
-              <div class="font-bold text-emerald-200 text-sm">Message Sent & Stored Successfully!</div>
-              <div class="mt-0.5 text-emerald-300/90" id="success-banner-msg">Your inquiry has been captured in the Netlify Forms database. Priyanshu will review and reply within 24 hours.</div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="contact-name" class="block text-xs font-semibold text-slate-300 mb-1">Your Name <span class="text-blue-400">*</span></label>
-              <input type="text" id="contact-name" name="name" required placeholder="e.g. Priyansh Sharma" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500">
-            </div>
-            <div>
-              <label for="contact-email" class="block text-xs font-semibold text-slate-300 mb-1">Work / Business Email <span class="text-blue-400">*</span></label>
-              <input type="email" id="contact-email" name="email" required placeholder="name@company.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="contact-company" class="block text-xs font-semibold text-slate-300 mb-1">Company / Organization</label>
-              <input type="text" id="contact-company" name="company" placeholder="e.g. TechCorp, Startup, or Academic" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500">
-            </div>
-            <div>
-              <label for="contact-opportunity" class="block text-xs font-semibold text-slate-300 mb-1">Inquiry / Opportunity Type</label>
-              <select id="contact-opportunity" name="opportunity_type" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500">
-                <option value="1st-sem-internship">1st-Year / 1st-Sem Internship (AI/ML, Web, SDE)</option>
-                <option value="fullstack-project">Full-Stack Web Development Project</option>
-                <option value="hackathon-collab">Hackathon / Project Collaboration</option>
-                <option value="technical-discussion">Technical Discussion / Mentorship</option>
-                <option value="other">Other Inquiry</option>
+            <div class="form-group">
+              <label for="topic">Inquiry Topic</label>
+              <select id="topic" name="topic">
+                <option value="SDE / AI-ML / Cloud Internship">SDE / AI-ML / Cloud Internship Opportunity</option>
+                <option value="Upwork / Freelance Full-Stack Project">Upwork / Freelance Full-Stack &amp; AI Project</option>
+                <option value="Hackathon / Tech Community">Hackathon / Tech Community</option>
+                <option value="General Inquiry">General Message</option>
               </select>
             </div>
-          </div>
 
-          <div>
-            <label for="contact-msg" class="block text-xs font-semibold text-slate-300 mb-1">Project Note / Role Details <span class="text-blue-400">*</span></label>
-            <textarea id="contact-msg" name="message" rows="3" required placeholder="Tell me about your tech stack, role, timeline, or engineering challenge..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500"></textarea>
-          </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell me about your project, role, or idea..." required></textarea>
+            </div>
 
-          <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
-            <button type="submit" id="contact-submit-btn" class="w-full sm:flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/20 transition-all text-center flex items-center justify-center space-x-2">
-              <span>Send Message to Netlify Database</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            <button type="submit" class="btn btn-primary btn-full">
+              <span>Transmit Message</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
             </button>
-            <button type="button" id="copy-email-card-btn" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors">
-              Copy Email Direct
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between pt-2 text-[11px] text-slate-400">
-            <span class="inline-flex items-center space-x-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Netlify Forms Backend Active</span>
-            </span>
-            <button type="button" id="open-form-modal-btn" class="text-blue-400 hover:underline inline-flex items-center space-x-1">
-              <span>Netlify Form Specs</span>
-              <span>ℹ</span>
-            </button>
-          </div>
-        </form>
+            <div class="db-toast" id="dbToast" aria-live="polite"></div>
+          </form>
+        </div>
       </div>
+    </section>
+  </main>
 
-      <div class="mt-8 text-xs text-slate-500">
-        Direct Email: <a href="mailto:priyanshubhatta2007@gmail.com" class="text-slate-300 underline">priyanshubhatta2007@gmail.com</a> &nbsp;|&nbsp;
-        Mobile: <span class="text-slate-300">+91 8250731670</span> &nbsp;|&nbsp;
-        Location: <span class="text-slate-300">Ranaghat / Kolkata, West Bengal, India</span>
+  <!-- Local PortfolioDB Client Submissions Modal -->
+  <div class="db-modal-backdrop" id="dbModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="dbModalTitle">
+    <div class="db-modal">
+      <div class="db-modal-header">
+        <div>
+          <span class="section-tag" style="margin-bottom: 0.2rem;">INDEXEDDB + LOCALSTORAGE ENGINE</span>
+          <h3 id="dbModalTitle">Saved Client &amp; Recruiter Submissions</h3>
+        </div>
+        <div style="display: flex; gap: 0.6rem;">
+          <button type="button" id="clearDbBtn" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">Clear Logs</button>
+          <button type="button" id="closeDbModalBtn" class="btn btn-primary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">Close</button>
+        </div>
+      </div>
+      <div class="db-entry-list" id="dbEntryList">
+        <p style="color: #94a3b8;">Loading records from PortfolioDB...</p>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Footer -->
-  <footer class="py-8 border-t border-slate-900 text-center text-xs text-slate-500">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div>&copy; 2026 Priyanshu Bhatta. Designed for 1st-Semester Internship Outreach.</div>
-      <div class="flex space-x-4">
-        <a href="https://github.com/Priyanshu568" target="_blank" rel="noreferrer" class="hover:text-slate-300">GitHub</a>
-        <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noreferrer" class="hover:text-slate-300">LinkedIn</a>
-        <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noreferrer" class="hover:text-slate-300">Devpost</a>
-        <a href="https://www.skills.google/public_profiles/c4a7e248-7ee7-41e9-8c41-c644f7431ccd" target="_blank" rel="noreferrer" class="hover:text-slate-300">Google Skills</a>
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>&copy; <span id="currentYear"></span> Priyanshu Bhatta. Engineered with HTML, CSS, Vanilla JS &amp; PortfolioDB.</p>
+      <div class="footer-links">
+        <a href="resume.html">ATS Resume</a>
+        <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://leetcode.com/u/morningstar_69" target="_blank" rel="noopener noreferrer">LeetCode</a>
+        <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noopener noreferrer">Devpost</a>
+        <a href="form.html">Direct Form</a>
       </div>
     </div>
   </footer>
 
-  <!-- Project Detail Modal -->
-  <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-    <div class="glass-card max-w-2xl w-full rounded-2xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl">
-      <button id="close-project-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-      <div id="modal-content">
-        <!-- Dynamically populated -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Resume Preview Modal -->
-  <div id="resume-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-    <div class="glass-card max-w-xl w-full rounded-2xl p-6 sm:p-8 relative border border-slate-700 shadow-2xl">
-      <button id="close-resume-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-      <h3 class="text-xl font-bold text-slate-100 mb-2">Priyanshu Bhatta - ATS Resume</h3>
-      <p class="text-xs text-slate-400 mb-6">
-        Full 2-page ATS formatted curriculum vitae highlighting 1st-semester CSE (AI/ML) status, 5 projects, hackathon leadership, and verified Google Cloud badges.
-      </p>
-      <div class="space-y-3 mb-6 text-xs text-slate-300">
-        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
-          <div>
-            <div class="font-bold text-slate-100">Priyanshu_Bhatta_CV.pdf</div>
-            <div class="text-[11px] text-slate-400">Official 2-Page ATS PDF Deliverable</div>
-          </div>
-          <button type="button" id="download-cv-btn" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold">
-            Download PDF
-          </button>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
-          <div>
-            <div class="font-bold text-slate-100">Priyanshu_Bhatta_CV.md</div>
-            <div class="text-[11px] text-slate-400">Plain Markdown Source</div>
-          </div>
-          <button id="copy-markdown-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700">
-            Copy Text
-          </button>
-        </div>
-      </div>
-      <button id="close-resume-modal-bottom-btn" class="w-full py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition-colors">
-        Close Preview
-      </button>
-    </div>
-  </div>
-
-  <!-- Interactive JavaScript Logic -->
   <script src="database.js"></script>
   <script src="script.js"></script>
+  <script>
+    // Connect PortfolioDB (database.js) UI Inspector & Company Field Sync
+    document.addEventListener('DOMContentLoaded', () => {
+      const openBtn = document.getElementById('openDbModalBtn');
+      const closeBtn = document.getElementById('closeDbModalBtn');
+      const clearBtn = document.getElementById('clearDbBtn');
+      const backdrop = document.getElementById('dbModalBackdrop');
+      const listEl = document.getElementById('dbEntryList');
+      const contactForm = document.getElementById('contactForm');
+      const dbToast = document.getElementById('dbToast');
 
-  <!-- Netlify Form Specs Modal -->
-  <div id="form-specs-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-    <div class="glass-card max-w-lg w-full rounded-2xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl text-left">
-      <button id="close-form-specs-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-3">
-        <span>Netlify Forms Architecture</span>
-      </div>
-      <h3 class="text-xl font-bold text-slate-100 mb-2">Netlify Client Database Specifications</h3>
-      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-        This portfolio uses Netlify's built-in serverless form handling. When hosted on <span class="text-blue-400 font-mono">netlify.app</span>, submissions are automatically saved into your Netlify dashboard under the <strong>Forms</strong> tab without any custom backend or API server.
-      </p>
-      <div class="space-y-3 mb-6 text-xs text-slate-300">
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
-          <div class="font-bold text-slate-200 mb-1">Form Name & Attributes:</div>
-          <code class="text-[11px] text-blue-300 font-mono block bg-slate-950 p-2 rounded">&lt;form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field"&gt;</code>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
-          <div class="font-bold text-slate-200 mb-1">Stored Client Database Fields:</div>
-          <ul class="list-disc list-inside space-y-0.5 text-slate-400 text-[11px]">
-            <li><span class="text-slate-200 font-semibold">name</span>: Full Name of recruiter or client</li>
-            <li><span class="text-slate-200 font-semibold">email</span>: Work / contact email address</li>
-            <li><span class="text-slate-200 font-semibold">company</span>: Organization or startup name</li>
-            <li><span class="text-slate-200 font-semibold">opportunity_type</span>: Internship, Project, Hackathon, or Mentorship</li>
-            <li><span class="text-slate-200 font-semibold">message</span>: Project note or role problem statement</li>
-            <li><span class="text-slate-200 font-semibold">bot-field</span>: Anti-spam honeypot (hidden from humans)</li>
-          </ul>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
-          <div class="font-bold text-slate-200 mb-1">Standalone Form File:</div>
-          <p class="text-slate-400 text-[11px]">A companion <code class="text-blue-300">form.html</code> file is included in this build for standalone hosting or direct embedding.</p>
-        </div>
-      </div>
-      <button id="close-form-specs-bottom-btn" class="w-full py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition-colors">
-        Close Specifications
-      </button>
-    </div>
-  </div>
+      async function renderDbEntries() {
+        if (!window.PortfolioDB || !listEl) return;
+        const rows = await window.PortfolioDB.getAllSubmissions();
+        if (!rows.length) {
+          listEl.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem;">No local submissions saved yet. Submit the contact form to test IndexedDB / LocalStorage logging.</p>';
+          return;
+        }
+        listEl.innerHTML = rows
+          .slice()
+          .reverse()
+          .map(
+            (item) => `
+            <div class="db-entry-card">
+              <div class="db-entry-top">
+                <strong>${item.name} <span style="color:#94a3b8;font-weight:400;">(${item.email})</span></strong>
+                <span class="db-entry-badge">${item.opportunity_type}</span>
+              </div>
+              <div style="color:#64748b;font-size:0.78rem;margin-bottom:0.4rem;">
+                Company: ${item.company || 'N/A'} &bull; ${new Date(item.created_at).toLocaleString()}
+              </div>
+              <p style="color:#cbd5e1;margin:0;">${item.message}</p>
+            </div>
+          `
+          )
+          .join('');
+      }
 
+      if (contactForm && window.PortfolioDB) {
+        contactForm.addEventListener('submit', async () => {
+          const fd = new FormData(contactForm);
+          const res = await window.PortfolioDB.saveSubmission({
+            name: fd.get('name'),
+            email: fd.get('email'),
+            company: fd.get('company') || 'N/A',
+            opportunity_type: fd.get('topic'),
+            message: fd.get('message')
+          });
+          if (res && res.success && dbToast) {
+            dbToast.textContent = `Saved locally via ${res.storage} (#${res.id}) — forwarding to Netlify...`;
+          }
+        });
+      }
+
+      if (openBtn && backdrop) {
+        openBtn.addEventListener('click', async () => {
+          backdrop.classList.add('open');
+          await renderDbEntries();
+        });
+      }
+
+      if (closeBtn && backdrop) {
+        closeBtn.addEventListener('click', () => backdrop.classList.remove('open'));
+        backdrop.addEventListener('click', (e) => {
+          if (e.target === backdrop) backdrop.classList.remove('open');
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', async () => {
+          if (window.PortfolioDB) {
+            await window.PortfolioDB.clearAll();
+            await renderDbEntries();
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

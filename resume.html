@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priyanshu Bhatta — ATS Resume | Frontend & Backend Developer | AI & Cloud Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #060913;
+      --paper-bg: #ffffff;
+      --ink-primary: #0f172a;
+      --ink-secondary: #334155;
+      --ink-muted: #475569;
+      --accent: #0284c7;
+      --border-light: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0f172a 0%, var(--bg-dark) 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink-primary);
+      padding: 1.5rem 1rem 3.5rem;
+      min-height: 100vh;
+    }
+
+    /* Floating Action Toolbar (Hidden in Print) */
+    .toolbar {
+      max-width: 880px;
+      margin: 0 auto 1.25rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(15, 23, 42, 0.92);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      color: #f8fafc;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      padding: 0.52rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .tool-btn:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .tool-btn.primary {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #060913;
+      border: none;
+    }
+
+    .tool-btn.primary:hover {
+      opacity: 0.92;
+      color: #060913;
+    }
+
+    .focus-select {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: 0.83rem;
+      font-weight: 500;
+    }
+
+    /* Resume Sheet */
+    .resume-sheet {
+      max-width: 880px;
+      margin: 0 auto;
+      background: var(--paper-bg);
+      padding: 2.4rem 2.75rem;
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+      line-height: 1.48;
+    }
+
+    .resume-header {
+      border-bottom: 2px solid var(--ink-primary);
+      padding-bottom: 0.95rem;
+      margin-bottom: 1.05rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .resume-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: var(--ink-primary);
+      line-height: 1.1;
+    }
+
+    .headline {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 0.25rem;
+    }
+
+    .sub-location {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-top: 0.25rem;
+    }
+
+    .contact-block {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--ink-secondary);
+      line-height: 1.55;
+    }
+
+    .contact-block a {
+      color: var(--ink-secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-block a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .cv-section {
+      margin-bottom: 1.12rem;
+    }
+
+    .cv-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .cv-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-primary);
+      border-bottom: 1.5px solid var(--border-light);
+      padding-bottom: 0.24rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .summary-text {
+      font-size: 0.845rem;
+      color: var(--ink-secondary);
+      text-align: justify;
+    }
+
+    /* Skills Table */
+    .skills-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.825rem;
+    }
+
+    .skills-table td {
+      padding: 0.22rem 0;
+      vertical-align: top;
+    }
+
+    .skills-table td:first-child {
+      font-weight: 700;
+      color: var(--ink-primary);
+      width: 215px;
+      padding-right: 0.6rem;
+    }
+
+    .skills-table td:last-child {
+      color: var(--ink-secondary);
+    }
+
+    /* Entries */
+    .entry {
+      margin-bottom: 0.78rem;
+      break-inside: avoid;
+    }
+
+    .entry:last-child {
+      margin-bottom: 0;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .entry-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--ink-primary);
+    }
+
+    .entry-subtitle {
+      font-size: 0.835rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      margin-top: 0.08rem;
+    }
+
+    .entry-meta {
+      font-size: 0.785rem;
+      color: var(--ink-muted);
+      margin-top: 0.1rem;
+    }
+
+    .entry-meta a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .entry-meta a:hover {
+      text-decoration: underline;
+    }
+
+    .entry-date {
+      font-size: 0.79rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .cv-list {
+      margin-top: 0.28rem;
+      padding-left: 1.15rem;
+      font-size: 0.83rem;
+      color: var(--ink-secondary);
+    }
+
+    .cv-list li {
+      margin-bottom: 0.24rem;
+    }
+
+    .cv-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .cv-list strong {
+      color: var(--ink-primary);
+    }
+
+    .cert-list li {
+      margin-bottom: 0.34rem;
+      break-inside: avoid;
+    }
+
+    .cert-list a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .cert-list a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 680px) {
+      .resume-sheet {
+        padding: 1.4rem;
+      }
+      .contact-block {
+        text-align: left;
+      }
+    }
+
+    /* Clean A4 Print Layout */
+    @media print {
+      @page {
+        size: A4;
+        margin: 10mm 12mm;
+      }
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .resume-sheet {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Controls (Hidden when printing) -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <a href="index.html" class="tool-btn">&larr; Back to Portfolio</a>
+      <select id="resumeFocusSelect" class="focus-select" aria-label="Select Resume Headline Focus">
+        <option value="default">Role: Frontend &amp; Backend | AI &amp; Cloud Engineer (Default)</option>
+        <option value="hybrid">Role: Full-Stack &amp; Freelance Software Engineer</option>
+        <option value="aiml">Role: Applied AI, Agentic Systems &amp; GCP Engineer</option>
+      </select>
+    </div>
+    <div class="toolbar-right">
+      <a href="Priyanshu_Bhatta_Resume.pdf" download="Priyanshu_Bhatta_Resume.pdf" class="tool-btn">
+        Download PDF
+      </a>
+      <button type="button" class="tool-btn primary" onclick="window.print()">
+        Print / Save Formatted PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Full ATS Resume Document -->
+  <article class="resume-sheet">
+    <header class="resume-header">
+      <div>
+        <h1>PRIYANSHU BHATTA</h1>
+        <p class="headline" id="cvHeadline">Frontend and Backend Developer | AI &amp; Cloud Engineer</p>
+        <p class="sub-location">Kolkata / Ranaghat, West Bengal, India &bull; +91 8250731670 &bull; <a href="mailto:priyanshubhatta2007@gmail.com" style="color: inherit; text-decoration: none;">priyanshubhatta2007@gmail.com</a></p>
+      </div>
+      <div class="contact-block">
+        <div>
+          <a href="https://priyanshubhatta.netlify.app" target="_blank" rel="noopener noreferrer">priyanshubhatta.netlify.app</a> &bull;
+          <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">github.com/Priyanshu568</a>
+        </div>
+        <div>
+          <a href="https://www.linkedin.com/in/priyanshubhatta69" target="_blank" rel="noopener noreferrer">linkedin.com/in/priyanshubhatta69</a> &bull;
+          <a href="https://leetcode.com/u/morningstar_69" target="_blank" rel="noopener noreferrer">leetcode.com/u/morningstar_69</a>
+        </div>
+        <div>
+          <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noopener noreferrer">devpost.com/Priyanshu568</a> &bull;
+          <a href="https://x.com/prithbat" target="_blank" rel="noopener noreferrer">x.com/prithbat</a> &bull;
+          <a href="https://facebook.com/priyanshu.bhatta.395025" target="_blank" rel="noopener noreferrer">Facebook</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- SUMMARY -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Summary</h2>
+      <p class="summary-text" id="cvSummary">
+        Computer Science and Engineering (AI/ML &amp; Cloud Computing) undergraduate at Swami Vivekananda University focused on building responsive frontend interfaces, scalable backend architectures, full-stack web applications, and applied AI solutions that solve real-world civic, e-commerce, and industrial problems. Trained in HTML5, CSS3, JavaScript (ES6+), React.js, Tailwind CSS, Python, Java, C++, Node.js, Express.js, and SQL/SQLite/PostgreSQL, backed by a strong foundation in Data Structures and Algorithms (DSA) and RESTful API engineering. Experienced in shipping end-to-end systems—including CivicPulse (geospatial municipal issue tracker), Orbyt (polyglot AI social network), MDR Validator (data validation engine), and ShopDesk AI (agentic customer support)—while delivering freelance Upwork solutions, leading hackathon teams (ORBION, Schneider Electric Yuva Yodha, BHARAT AGENTIC 2026, PromptWars), and advancing cloud/geospatial expertise via Google Cloud Career Launchpad, IICT AI Skills House, and ISRO's IIRS.
+      </p>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Education</h2>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Bachelor of Technology (B.Tech) in Computer Science and Engineering (AI/ML &amp; Cloud Computing)</span>
+          <span class="entry-date">July 2026 &ndash; July 2030 (1st Year, Semester 1)</span>
+        </div>
+        <div class="entry-subtitle">Swami Vivekananda University &bull; Kolkata, West Bengal, India</div>
+        <ul class="cv-list">
+          <li><strong>Coursework &amp; Communities:</strong> Data Structures &amp; Algorithms (DSA), OOP, Frontend &amp; Full-Stack Web Development (HTML, CSS, JavaScript), AI/ML, Cloud Computing; Member, Developer Student Club (DSC) CUSIT Powered by Google Developers.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Higher Secondary (Class XII, CBSE - PCM Science)</span>
+          <span class="entry-date">April 2025 &ndash; May 2026</span>
+        </div>
+        <div class="entry-subtitle">JRS Public School &amp; Satish Chandra Memorial School &bull; West Bengal, India</div>
+        <ul class="cv-list">
+          <li>Completed senior secondary education in Physics, Chemistry, and Mathematics; appeared in national/state engineering entrance exams including JEE Main, WBJEE, COMEDK UGET, VITEEE, SRMJEEE, KIITEE, Scaler NSET, and IISER IAT (2026).</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Secondary (Class X, CBSE)</span>
+          <span class="entry-date">April 2023 &ndash; May 2024</span>
+        </div>
+        <div class="entry-subtitle">Satish Chandra Memorial School &bull; West Bengal, India</div>
+      </div>
+    </section>
+
+    <!-- TECHNICAL & CERTIFICATION-LEVEL SKILLS -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Technical &amp; Certification-Level Skills</h2>
+      <table class="skills-table">
+        <tr>
+          <td>Programming Languages:</td>
+          <td>Python, Java, JavaScript (ES6+), TypeScript, C++, SQL, HTML5, CSS3</td>
+        </tr>
+        <tr>
+          <td>Frontend Web Development:</td>
+          <td>HTML5, CSS3, JavaScript (ES6+), React.js, Tailwind CSS, DOM Manipulation, Responsive &amp; Mobile-First UI Design, Three.js / WebGL</td>
+        </tr>
+        <tr>
+          <td>Full-Stack &amp; Backend Dev:</td>
+          <td>Node.js, Express.js, RESTful APIs, Microservices Architecture, SQLite (social.db, orbyt.db), PostgreSQL, Supabase, BigQuery, Webhooks, Nginx</td>
+        </tr>
+        <tr>
+          <td>Applied AI &amp; Geospatial ML:</td>
+          <td>Generative &amp; Agentic AI, Google AI Studio, Gemini Enterprise, Cloud Vision API, Speech &amp; Language APIs, Multi-Agent Ideation, Deep Research Agents, Image Classification, Geodata ML (ISRO-IIRS), Leaflet.js, Mappls APIs, Prompt Engineering, NotebookLM</td>
+        </tr>
+        <tr>
+          <td>Cloud &amp; DevOps (GCP Verified):</td>
+          <td>Google Cloud Platform (Compute Engine VMs, Persistent Disks, Cloud Storage, Cloud Functions, Cloud Pub/Sub, Cloud IAM, Service Accounts, Custom YAML Roles, gcloud CLI), Cloud Security, Render, Netlify, Git, GitHub, VS Code</td>
+        </tr>
+        <tr>
+          <td>Data Validation, DSA &amp; Soft Skills:</td>
+          <td>YAML Schema Mapping, Data Normalization &amp; Validation Pipelines, Data Structures &amp; Algorithms (DSA), OOP, Automated Testing, Hackathon Team Leadership; English, Bengali, Hindi</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- TECHNICAL PROJECTS -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Technical Projects</h2>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Frontend and Backend Developer &mdash; CivicPulse</span>
+          <span class="entry-date">Aug 2026 &ndash; Oct 2026</span>
+        </div>
+        <div class="entry-subtitle">CivicPulse &mdash; Hyperlocal Municipal Issue Tracker &amp; Geospatial Routing Platform</div>
+        <div class="entry-meta">
+          Portfolio: <a href="https://priyanshubhatta.netlify.app" target="_blank" rel="noopener noreferrer">priyanshubhatta.netlify.app</a> |
+          GitHub: <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">github.com/Priyanshu568</a>
+        </div>
+        <ul class="cv-list">
+          <li><strong>Stack:</strong> Frontend (React.js, Tailwind CSS, HTML5/CSS3, JavaScript) &amp; Backend (Node.js, Express.js, REST APIs, Leaflet.js / Mappls, Image Classification)</li>
+          <li>Architected a mobile-first hyperlocal public issue tracking and routing web application with a responsive React and Tailwind CSS frontend to streamline community infrastructure reporting.</li>
+          <li>Integrated Leaflet.js and Mappls geospatial mapping services with automated image classification and Node.js/Express.js REST APIs to verify uploaded photographs and route geotagged civic complaints.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">AI Social Media Engineer &mdash; Orbyt</span>
+          <span class="entry-date">Aug 2026 &ndash; Sep 2026</span>
+        </div>
+        <div class="entry-subtitle">Orbyt &mdash; Polyglot AI-Powered Social Networking Application</div>
+        <div class="entry-meta">
+          GitHub: <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">github.com/Priyanshu568</a>
+        </div>
+        <ul class="cv-list">
+          <li><strong>Stack:</strong> Frontend (HTML5, CSS3, JavaScript) &amp; Backend (Python, C++, Java, SQLite: social.db, orbyt.db)</li>
+          <li>Engineered a multi-language AI social platform combining an interactive HTML5, CSS3, and JavaScript web frontend with a Python backend and dual relational SQLite databases (<code>social.db</code>, <code>orbyt.db</code>).</li>
+          <li>Built a high-speed C++ microservice (<code>moderate.cpp</code>) for real-time automated content moderation and a Java recommendation engine (<code>Suggest.java</code>) for personalized user and feed suggestions.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Data Engineering Lead &mdash; MDR Validator</span>
+          <span class="entry-date">Sep 2026 &ndash; Oct 2026</span>
+        </div>
+        <div class="entry-subtitle">MDR Validator &mdash; Configuration-Driven Master Data Validation Engine</div>
+        <div class="entry-meta">
+          GitHub Repo: <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">github.com/Priyanshu568 (mdr_validator)</a>
+        </div>
+        <ul class="cv-list">
+          <li><strong>Stack:</strong> Python, YAML Configuration (<code>settings.yaml</code>, <code>mappings.yaml</code>), UI Reading, Database Models, Automated Testing</li>
+          <li>Developed an extensible Python data validation engine governed by declarative YAML configuration and schema mapping definitions (<code>settings.yaml</code>, <code>mappings.yaml</code>) to enforce data integrity across heterogeneous sources.</li>
+          <li>Implemented core modules covering data normalizers, UI readers, mapping repositories, rule validation logic, engine processing, multi-source connectors, admin utilities, automated reporting, and unit tests.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Agentic AI Developer &mdash; ShopDesk AI</span>
+          <span class="entry-date">Oct 2026</span>
+        </div>
+        <div class="entry-subtitle">Devpost &mdash; Agentic E-Commerce Customer Support &amp; Escalation System</div>
+        <div class="entry-meta">
+          Project: <a href="https://devpost.com/Priyanshu568" target="_blank" rel="noopener noreferrer">devpost.com/Priyanshu568</a> |
+          GitHub: <a href="https://github.com/Priyanshu568" target="_blank" rel="noopener noreferrer">github.com/Priyanshu568</a>
+        </div>
+        <ul class="cv-list">
+          <li><strong>Stack:</strong> Agentic AI, Full-Stack Web UI (HTML/CSS/JS), Python, Node.js, LLM APIs</li>
+          <li>Built and shipped an autonomous e-commerce customer support platform for the Build, Ship, Shape: Amazon Developer Hackathon on Devpost featuring automated inquiry resolution and context-preserving human-agent escalation.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Applied AI Developer &mdash; AI Energy Copilot</span>
+          <span class="entry-date">Sep 2026 &ndash; Oct 2026</span>
+        </div>
+        <div class="entry-subtitle">Schneider Electric &mdash; Smart Electricity Bill Analyzer &amp; Consumption Predictor (Yuva Yodha Challenge)</div>
+        <ul class="cv-list">
+          <li><strong>Stack:</strong> Applied AI, Predictive Analytics, Python, Web Dashboard (HTML/CSS/JS)</li>
+          <li>Designed an AI energy management tool for Schneider Electric's Yuva Yodha challenge that parses uploaded electricity bills to generate itemized consumption breakdowns, next-month usage forecasts, and conservation tips.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE, HACKATHONS & LEADERSHIP -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Experience, Hackathons &amp; Leadership</h2>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Freelance Full-Stack &amp; AI Developer</span>
+          <span class="entry-date">Oct 2026 &ndash; Present &bull; Remote</span>
+        </div>
+        <div class="entry-subtitle">Upwork (Remote)</div>
+        <ul class="cv-list">
+          <li>Architect and deploy full-stack web applications, RESTful APIs, and AI-powered automation workflows using React, Node.js, Express.js, Python, and PostgreSQL.</li>
+          <li>Build custom Gemini API and agentic support integrations, database schemas, and cloud-hosted MVPs for web and AI engineering clients.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Team Leader &mdash; ORBION: 8-Hour Hackathon (Tech Kurukshetra '26)</span>
+          <span class="entry-date">Sep 2026 &ndash; Oct 2026 &bull; Kolkata, India</span>
+        </div>
+        <div class="entry-subtitle">Institute of Engineering and Management (IEM), Kolkata (via Unstop)</div>
+        <ul class="cv-list">
+          <li>Recruited and led a cross-functional student engineering team during IEM Kolkata's intensive 8-hour hackathon, directing problem formulation, frontend/backend system design, rapid prototyping, and technical pitch deck delivery.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Innovator &mdash; Yuva Yodha Energy Tech Hackathon 2026</span>
+          <span class="entry-date">Sep 2026 &ndash; Oct 2026 &bull; National</span>
+        </div>
+        <div class="entry-subtitle">Schneider Electric (Hosted on YouNoodle)</div>
+        <ul class="cv-list">
+          <li>Architected and submitted the AI Energy Copilot proposal for Schneider Electric's national sustainability competition, targeting household energy literacy and predictive load management.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Participant &mdash; BHARAT AGENTIC 2026, Nebius x NVIDIA &amp; PromptWars Virtual</span>
+          <span class="entry-date">Oct 2026 &ndash; Nov 2026 &bull; Global / National</span>
+        </div>
+        <div class="entry-subtitle">AIKart, Devpost &amp; Hack2Skill</div>
+        <ul class="cv-list">
+          <li>Competed in the 12-hour BHARAT AGENTIC 2026 AI agent hackathon (Understand &rarr; Reason &rarr; Plan &rarr; Use Tools &rarr; Act &rarr; Deliver), shipped ShopDesk AI on Devpost, and built full-stack AI MVPs for PromptWars Virtual and Nebius x NVIDIA.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Student Campus Promoter (Internshala Student Partner) &amp; DSC CUSIT Member</span>
+          <span class="entry-date">Aug 2026 &ndash; Present &bull; Kolkata, West Bengal, India</span>
+        </div>
+        <div class="entry-subtitle">Internshala Trainings &amp; Developer Student Club CUSIT (Powered by Google Developers)</div>
+        <ul class="cv-list">
+          <li>Selected to represent Internshala on campus to mentor peers on technical internships and Full-Stack Web Development (HTML, CSS, JavaScript, React, Node.js) with AI; active contributor in GDG on Campus and Google Cloud Learn with Communities.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS, VERIFIED SKILL BADGES & NATIONAL PROGRAMS -->
+    <section class="cv-section">
+      <h2 class="cv-section-title">Certifications, Verified Skill Badges &amp; National Programs</h2>
+      <ul class="cv-list cert-list">
+        <li><strong>Analyze Images with the Cloud Vision API (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Nov 15, 2026; Verify: <a href="https://www.credly.com/go/fImRn2Gge8A1849E98XXlQ" target="_blank" rel="noopener noreferrer">credly.com/go/fImRn2Gge8A1849E98XXlQ</a>). Verified computer vision implementation for OCR text extraction and label, face, and landmark detection in images.</li>
+        <li><strong>Using the Google Cloud Speech API (Skill Badge)</strong> &mdash; Google Cloud / Credly (Nov 15, 2026; Verify: <a href="https://www.credly.com/go/gA59Rnf3Idc3nXIJEQjFJw" target="_blank" rel="noopener noreferrer">credly.com/go/gA59Rnf3Idc3nXIJEQjFJw</a>). Demonstrated Speech-to-Text API request construction and automated audio transcription pipelines.</li>
+        <li><strong>Store, Process, and Manage Data on Google Cloud - Console (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Nov 13, 2026; Verify: <a href="https://www.credly.com/go/Ih7X0eZE9Wxoz6V0qHtTIQ" target="_blank" rel="noopener noreferrer">credly.com/go/Ih7X0eZE9Wxoz6V0qHtTIQ</a>). Validated hands-on Cloud Storage administration, event-driven Cloud Functions, and Cloud Pub/Sub messaging workflows.</li>
+        <li><strong>Develop AI-Powered Prototypes in Google AI Studio (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Nov 12, 2026; Verify: <a href="https://www.credly.com/go/kFCQa6zQvMeA4awEbDkEQA" target="_blank" rel="noopener noreferrer">credly.com/go/kFCQa6zQvMeA4awEbDkEQA</a>). Verified rapid generative AI prototyping, multimodal image/video analysis, and prompt system engineering in Google AI Studio.</li>
+        <li><strong>Implement Speech and Language Solutions with Pre-trained APIs (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Nov 12, 2026; Verify: <a href="https://www.credly.com/go/GrInb6kGb8mbxBYAkvvtgw" target="_blank" rel="noopener noreferrer">credly.com/go/GrInb6kGb8mbxBYAkvvtgw</a>). Demonstrated practical integration of Google Cloud Natural Language and Speech-to-Text/Text-to-Speech synthesis APIs.</li>
+        <li><strong>AI Boost Bootcamp: How to Use Gemini at Work 101 (Completion Badge)</strong> &mdash; Google Cloud (Nov 2026). Completed applied enterprise Gemini productivity and workflow automation training.</li>
+        <li><strong>Configure Service Accounts and IAM Roles for Google Cloud (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Oct 2026). Demonstrated mastery of GCP service accounts, custom YAML IAM roles, BigQuery Python client authentication, and <code>gcloud</code> CLI policy bindings.</li>
+        <li><strong>The Basics of Google Cloud Compute (Skill Badge &mdash; 100% Challenge Lab Score)</strong> &mdash; Google Cloud / Credly (Oct 2026). Verified hands-on competence in provisioning Compute Engine virtual machines (VMs), persistent disks, and cloud web servers.</li>
+        <li><strong>Create Your First Gemini Enterprise Application (Skill Badge)</strong> &mdash; Google Cloud / Credly (Oct 2026). Validated skills in building deep research agents, multi-agent ideation workflows, and focused analysis using Gemini Enterprise and NotebookLM.</li>
+        <li><strong>Google AI Essentials Specialization (5 Courses)</strong> &mdash; Google &amp; Coursera (Oct &ndash; Nov 2026). Completed official Google Career Certificates: <em>Introduction to AI</em> (Verify: <code>MEQD6YIAY16P</code>), <em>Maximize Productivity With AI Tools</em> (Verify: <code>6HBXWYU77HYQ</code>), <em>Discover the Art of Prompting</em> (Verify: <code>VNSOVA9W8ZJB</code>), <em>Stay Ahead of the AI Curve</em> (Verify: <code>WQOYUYRLQ2ZW</code>), and <em>Use AI Responsibly</em> (Verify: <code>1DGWKM1OFI7J</code>).</li>
+        <li><strong>AI/ML for Geodata Analysis (Online Training Programme)</strong> &mdash; Indian Institute of Remote Sensing (IIRS), ISRO Dehradun (July 2026, Reg. No. <code>20261883026394</code>). Selected for ISRO's specialized distance learning programme on machine learning for satellite remote sensing and geospatial data.</li>
+        <li><strong>IICT AI Skills House (AISH) National Scholarship Programme</strong> &mdash; Indian Institute of Creative Technologies (Ministry of I&amp;B, Govt. of India), Google &amp; YouTube (Aug 2026, ID: <code>IICT-16082662223</code>). Selected for the 4-module curriculum covering AI Essentials, Google Prompting Essentials, Introduction to Generative AI, and Generative AI Leader.</li>
+        <li><strong>Google Cloud Career Launchpad (APAC) &amp; Google Cloud Learn with Communities</strong> &mdash; Google Cloud (Aug &ndash; Nov 2026). Completing hands-on tracks in Cloud Computing, Cloud Security, Application Modernization with Generative AI, and Data Workflows.</li>
+        <li><strong>Gemini Quizwar 2026 &amp; National Youth Certifications</strong> &mdash; Awarded Certificate of Participation in Gemini Quizwar 2026 by Devengers/Unstop (6,300+ participants; shortlisted for Shinchan Online Hackathon 2026), plus Viksit Bharat Young Leaders Dialogue (VBYLD) 2027 and TB Mukt Bharat Abhiyan Quiz certificates from the Ministry of Youth Affairs &amp; Sports (MYBharat, Sept 2026).</li>
+      </ul>
+    </section>
+  </article>
+
+  <script>
+    const focusProfiles = {
+      default: {
+        headline: 'Frontend and Backend Developer | AI & Cloud Engineer',
+        summary:
+          "Computer Science and Engineering (AI/ML & Cloud Computing) undergraduate at Swami Vivekananda University focused on building responsive frontend interfaces, scalable backend architectures, full-stack web applications, and applied AI solutions that solve real-world civic, e-commerce, and industrial problems. Trained in HTML5, CSS3, JavaScript (ES6+), React.js, Tailwind CSS, Python, Java, C++, Node.js, Express.js, and SQL/SQLite/PostgreSQL, backed by a strong foundation in Data Structures and Algorithms (DSA) and RESTful API engineering. Experienced in shipping end-to-end systems—including CivicPulse (geospatial municipal issue tracker), Orbyt (polyglot AI social network), MDR Validator (data validation engine), and ShopDesk AI (agentic customer support)—while delivering freelance Upwork solutions, leading hackathon teams (ORBION, Schneider Electric Yuva Yodha, BHARAT AGENTIC 2026, PromptWars), and advancing cloud/geospatial expertise via Google Cloud Career Launchpad, IICT AI Skills House, and ISRO's IIRS."
+      },
+      hybrid: {
+        headline: 'Full-Stack & Freelance Software Engineer | React • Node.js • Python • PostgreSQL',
+        summary:
+          'Freelance Full-Stack & AI Developer on Upwork and B.Tech CSE (AI/ML & Cloud Computing) undergraduate at Swami Vivekananda University. Experienced in architecting responsive frontend interfaces (React.js, Tailwind CSS, TypeScript, Three.js/WebGL), RESTful APIs (Node.js, Express.js, Python), and relational databases (PostgreSQL, SQLite, Supabase) across civic, social, and enterprise systems.'
+      },
+      aiml: {
+        headline: 'Applied AI, Agentic Systems & Google Cloud Engineer',
+        summary:
+          'Computer Science (AI/ML & Cloud Computing) undergraduate specializing in agentic AI workflows, Google AI Studio prototyping, Cloud Vision & Speech APIs, geospatial ML (ISRO-IIRS), and GCP cloud infrastructure (Compute Engine, Cloud Storage, Cloud Functions, Cloud Pub/Sub, IAM). Holder of the 5-course Google AI Essentials Specialization and 100%-scored Google Cloud Challenge Lab Skill Badges.'
+      }
+    };
+
+    const selectEl = document.getElementById('resumeFocusSelect');
+    const headlineEl = document.getElementById('cvHeadline');
+    const summaryEl = document.getElementById('cvSummary');
+
+    function applyFocus(mode) {
+      const profile = focusProfiles[mode] || focusProfiles.default;
+      headlineEl.textContent = profile.headline;
+      summaryEl.textContent = profile.summary;
+    }
+
+    selectEl.addEventListener('change', (e) => applyFocus(e.target.value));
+
+    const params = new URLSearchParams(window.location.search);
+    const initialMode = params.get('mode');
+    if (initialMode && focusProfiles[initialMode]) {
+      selectEl.value = initialMode;
+      applyFocus(initialMode);
+    }
+    if (params.get('autoprint') === '1') {
+      window.addEventListener('load', () => setTimeout(() => window.print(), 350));
+    }
+  </script>
+</body>
+</html>
