@@ -1,21 +1,46 @@
 /**
  * database.js - Client-Side Database System for Priyanshu Bhatta Portfolio
  *
- * Provides an asynchronous database engine using IndexedDB (v2) with automatic LocalStorage fallback.
- * Stores both recruiter/client form submissions and Priyanshu Bhatta's verified certifications.
+ * Provides an asynchronous database engine using IndexedDB (v3) with automatic LocalStorage fallback.
+ * Stores both recruiter/client form submissions and Priyanshu Bhatta's verified certifications,
+ * Google Cloud skill badges, Coursera credentials, and local asset links.
  */
 
 (function (global) {
   'use strict';
 
   const DB_NAME = 'PortfolioClientDB';
-  const DB_VERSION = 2;
+  const DB_VERSION = 3;
   const STORE_SUBMISSIONS = 'client_submissions';
   const STORE_CERTIFICATIONS = 'certifications';
   const LS_SUBMISSIONS_KEY = 'pb_client_submissions';
-  const LS_CERTS_KEY = 'pb_verified_certifications';
+  const LS_CERTS_KEY = 'pb_verified_certifications_v3';
 
   const VERIFIED_CERTIFICATIONS = [
+    {
+      id: 'gcp-vertex-gemini-api-2026',
+      title: 'Explore Generative AI with the Vertex AI Gemini API Skill Badge',
+      issuer: 'Google Cloud / Credly',
+      category: 'gcp',
+      date: 'Nov 18, 2026',
+      score: 'Intermediate Badge',
+      badgeImage: 'assets/badges/explore-generative-ai-with-the-vertex-ai-gemini-api.png',
+      verifyUrl: 'https://www.credly.com/badges/5df60f25-be4b-4730-ac16-754be7839998/public_url',
+      description: 'Intermediate Vertex AI Gemini API implementation covering text generation, multimodal image/video analysis, and function calling.',
+      skills: ['Vertex AI', 'Gemini API', 'Function Calling', 'Multimodal AI', 'Python']
+    },
+    {
+      id: 'gcp-build-website-2026',
+      title: 'Build a Website on Google Cloud Skill Badge',
+      issuer: 'Google Cloud / Credly',
+      category: 'gcp',
+      date: 'Nov 16, 2026',
+      score: 'Skill Badge',
+      badgeImage: 'assets/badges/build-a-website-on-google-cloud-skill-badge.png',
+      verifyUrl: 'https://www.credly.com/badges/8fd32f2f-76c0-402c-9d91-66fa3e473d81/public_url',
+      description: 'Deploying and scaling web applications on Cloud Run, Compute Engine, and Google Kubernetes Engine (GKE) with microservices.',
+      skills: ['Cloud Run', 'Compute Engine', 'GKE', 'Cloud Build', 'Microservices']
+    },
     {
       id: 'gcp-cloud-vision-2026',
       title: 'Analyze Images with the Cloud Vision API Skill Badge',
@@ -23,8 +48,10 @@
       category: 'gcp',
       date: 'Nov 15, 2026',
       score: '100% Lab Score',
+      badgeImage: 'assets/badges/analyze-images-with-the-cloud-vision-api-skill-badge.png',
       verifyUrl: 'https://www.credly.com/go/fImRn2Gge8A1849E98XXlQ',
-      skills: ['Cloud Vision API', 'OCR Text Detection', 'Label, Face & Landmark Detection']
+      description: 'Computer vision pipelines for OCR text extraction, label classification, and face & landmark detection in images.',
+      skills: ['Cloud Vision API', 'OCR Text Detection', 'Label & Face Detection']
     },
     {
       id: 'gcp-speech-api-2026',
@@ -33,7 +60,9 @@
       category: 'gcp',
       date: 'Nov 15, 2026',
       score: 'Skill Badge',
+      badgeImage: 'assets/badges/using-the-google-cloud-speech-api.png',
       verifyUrl: 'https://www.credly.com/go/gA59Rnf3Idc3nXIJEQjFJw',
+      description: 'Building Speech-to-Text API requests and automated audio-to-text transcription workflows on Google Cloud.',
       skills: ['Speech-to-Text API', 'Audio Transcription', 'Cloud Speech Pipelines']
     },
     {
@@ -43,7 +72,9 @@
       category: 'gcp',
       date: 'Nov 13, 2026',
       score: '100% Lab Score',
+      badgeImage: 'assets/badges/store-process-and-manage-data-on-google-cloud-console.png',
       verifyUrl: 'https://www.credly.com/go/Ih7X0eZE9Wxoz6V0qHtTIQ',
+      description: 'Cloud Storage bucket administration, event-driven Cloud Functions, and Cloud Pub/Sub messaging workflows.',
       skills: ['Cloud Storage', 'Cloud Functions', 'Cloud Pub/Sub']
     },
     {
@@ -53,7 +84,10 @@
       category: 'gcp',
       date: 'Nov 12, 2026',
       score: '100% Lab Score',
+      badgeImage: 'assets/badges/develop-ai-powered-prototypes-in-google-ai-studio.png',
+      pdfUrl: 'assets/certificates/Google_AI_Studio_Prototypes_Badge_20261112.pdf',
       verifyUrl: 'https://www.credly.com/go/kFCQa6zQvMeA4awEbDkEQA',
+      description: 'System prompt engineering, multimodal image/video analysis, and API-key generative AI prototyping.',
       skills: ['Google AI Studio', 'Multimodal Prototyping', 'Prompt Engineering']
     },
     {
@@ -63,7 +97,9 @@
       category: 'gcp',
       date: 'Nov 12, 2026',
       score: '100% Lab Score',
+      badgeImage: 'assets/badges/implement-speech-and-language-solutions-with-pre-trained-apis.png',
       verifyUrl: 'https://www.credly.com/go/GrInb6kGb8mbxBYAkvvtgw',
+      description: 'Speech-to-Text transcription, Text-to-Speech synthesis, and Cloud Natural Language entity/sentiment APIs.',
       skills: ['Cloud Natural Language API', 'Speech-to-Text', 'Text-to-Speech']
     },
     {
@@ -73,9 +109,18 @@
       category: 'coursera',
       date: 'Oct – Nov 2026',
       score: '5-Course Specialization',
-      verifyUrl: '',
-      credentialIds: ['MEQD6YIAY16P', '6HBXWYU77HYQ', 'VNSOVA9W8ZJB', 'WQOYUYRLQ2ZW', '1DGWKM1OFI7J'],
-      skills: ['Introduction to AI', 'Art of Prompting', 'Use AI Responsibly']
+      pdfUrl: 'assets/certificates/Coursera_ERYLOPI8Q2KC_Google_AI_Essentials_Specialization.pdf',
+      verifyUrl: 'https://coursera.org/verify/specialization/ERYLOPI8Q2KC',
+      credentialIds: ['ERYLOPI8Q2KC', 'MEQD6YIAY16P', '6HBXWYU77HYQ', 'VNSOVA9W8ZJB', 'WQOYUYRLQ2ZW', '1DGWKM1OFI7J'],
+      subCourses: [
+        { title: 'Introduction to AI', id: 'MEQD6YIAY16P', date: 'Oct 24, 2026', verifyUrl: 'https://coursera.org/verify/MEQD6YIAY16P', pdfUrl: 'assets/certificates/Coursera_MEQD6YIAY16P_Introduction_to_AI.pdf' },
+        { title: 'Maximize Productivity With AI Tools', id: '6HBXWYU77HYQ', date: 'Oct 26, 2026', verifyUrl: 'https://coursera.org/verify/6HBXWYU77HYQ', pdfUrl: 'assets/certificates/Coursera_6HBXWYU77HYQ_Maximize_Productivity_With_AI_Tools.pdf' },
+        { title: 'Discover the Art of Prompting', id: 'VNSOVA9W8ZJB', date: 'Nov 12, 2026', verifyUrl: 'https://coursera.org/verify/VNSOVA9W8ZJB', pdfUrl: 'assets/certificates/Coursera_VNSOVA9W8ZJB_Discover_the_Art_of_Prompting.pdf' },
+        { title: 'Stay Ahead of the AI Curve', id: 'WQOYUYRLQ2ZW', date: 'Nov 12, 2026', verifyUrl: 'https://coursera.org/verify/WQOYUYRLQ2ZW', pdfUrl: 'assets/certificates/Coursera_WQOYUYRLQ2ZW_Stay_Ahead_of_the_AI_Curve.pdf' },
+        { title: 'Use AI Responsibly', id: '1DGWKM1OFI7J', date: 'Nov 12, 2026', verifyUrl: 'https://coursera.org/verify/1DGWKM1OFI7J', pdfUrl: 'assets/certificates/Coursera_1DGWKM1OFI7J_Use_AI_Responsibly.pdf' }
+      ],
+      description: 'Completed all 5 Google Career Certificates: Introduction to AI, Maximize Productivity With AI Tools, Discover the Art of Prompting, Stay Ahead of the AI Curve & Use AI Responsibly.',
+      skills: ['Introduction to AI', 'Art of Prompting', 'Use AI Responsibly', 'AI Productivity']
     },
     {
       id: 'gcp-ai-boost-gemini-2026',
@@ -84,7 +129,9 @@
       category: 'gcp coursera',
       date: 'Nov 2026',
       score: 'Completion Badge',
-      verifyUrl: '',
+      badgeImage: 'assets/badges/ai-boost-bootcamp-gemini-at-work.png',
+      verifyUrl: 'https://www.cloudskillsboost.google/',
+      description: 'Applied enterprise Gemini workspace automation, structured prompting frameworks, and AI productivity pipelines.',
       skills: ['Gemini Enterprise Productivity', 'AI Workflow Automation']
     },
     {
@@ -92,9 +139,11 @@
       title: 'Configure Service Accounts and IAM Roles for Google Cloud',
       issuer: 'Google Cloud / Credly',
       category: 'gcp',
-      date: 'Oct 2026',
+      date: 'Oct 24, 2026',
       score: '100% Lab Score',
-      verifyUrl: '',
+      badgeImage: 'assets/badges/configure-service-accounts-and-iam-roles-for-google-cloud.png',
+      verifyUrl: 'https://www.credly.com/badges/64a013f8-b474-4116-9f51-80ed1056b971/public_url',
+      description: 'Custom YAML IAM roles, service account bindings, gcloud CLI policies, and BigQuery Python client authentication.',
       skills: ['Cloud IAM', 'Custom YAML Roles', 'Service Accounts', 'BigQuery Auth']
     },
     {
@@ -102,9 +151,11 @@
       title: 'The Basics of Google Cloud Compute',
       issuer: 'Google Cloud / Credly',
       category: 'gcp',
-      date: 'Oct 2026',
+      date: 'Oct 24, 2026',
       score: '100% Lab Score',
-      verifyUrl: '',
+      badgeImage: 'assets/badges/the-basics-of-google-cloud-compute.png',
+      verifyUrl: 'https://www.cloudskillsboost.google/',
+      description: 'Compute Engine VM provisioning, persistent disk attachment, and Nginx web server deployment.',
       skills: ['Compute Engine VMs', 'Persistent Disks', 'Nginx Web Servers']
     },
     {
@@ -112,9 +163,11 @@
       title: 'Create Your First Gemini Enterprise Application',
       issuer: 'Google Cloud & Coursera',
       category: 'gcp coursera',
-      date: 'Oct 2026',
-      score: 'Multi-Badge',
-      verifyUrl: '',
+      date: 'Oct 23, 2026',
+      score: 'Skill Badge',
+      badgeImage: 'assets/badges/create-your-first-gemini-enterprise-application.png',
+      verifyUrl: 'https://www.credly.com/badges/ea5392d8-44ac-4429-8cd9-52d00cde2d1a/public_url',
+      description: 'Deep research agents in Gemini Enterprise, multi-agent ideation workflows, and focused analysis with NotebookLM.',
       skills: ['Deep Research Agents', 'Multi-Agent Ideation', 'NotebookLM']
     },
     {
@@ -124,8 +177,8 @@
       category: 'programs',
       date: 'Jul – Sep 2026',
       score: 'National Fellowships',
-      verifyUrl: '',
       credentialIds: ['20261883026394', 'IICT-16082662223'],
+      description: 'ISRO IIRS AI/ML for Geodata Analysis (Reg: 20261883026394), IICT AISH Scholar (ID: IICT-16082662223) & Gemini Quizwar 2026.',
       skills: ['Geospatial Remote Sensing ML', 'Gemini Quizwar 2026', 'MYBharat']
     }
   ];
@@ -134,6 +187,7 @@
     constructor() {
       this.db = null;
       this.isIndexedDBSupported = typeof window !== 'undefined' && 'indexedDB' in window;
+      this.defaultCertifications = VERIFIED_CERTIFICATIONS;
     }
 
     async init() {
@@ -159,13 +213,16 @@
               subStore.createIndex('opportunity_type', 'opportunity_type', { unique: false });
             }
 
+            let certTxStore;
             if (!db.objectStoreNames.contains(STORE_CERTIFICATIONS)) {
               const certStore = db.createObjectStore(STORE_CERTIFICATIONS, { keyPath: 'id' });
               certStore.createIndex('category', 'category', { unique: false });
               certStore.createIndex('date', 'date', { unique: false });
+              certTxStore = certStore;
+            } else {
+              certTxStore = event.target.transaction.objectStore(STORE_CERTIFICATIONS);
             }
 
-            const certTxStore = event.target.transaction.objectStore(STORE_CERTIFICATIONS);
             VERIFIED_CERTIFICATIONS.forEach((cert) => certTxStore.put(cert));
           };
 
@@ -187,19 +244,41 @@
 
     _syncCertificationsToLocalStorage() {
       try {
-        localStorage.setItem(LS_CERTS_KEY, JSON.stringify(VERIFIED_CERTIFICATIONS));
+        const existing = JSON.parse(localStorage.getItem(LS_CERTS_KEY) || '[]');
+        const map = new Map();
+        VERIFIED_CERTIFICATIONS.forEach((c) => map.set(c.id, c));
+        if (Array.isArray(existing)) {
+          existing.forEach((c) => {
+            if (c && c.id && !map.has(c.id)) map.set(c.id, c);
+          });
+        }
+        localStorage.setItem(LS_CERTS_KEY, JSON.stringify(Array.from(map.values())));
       } catch (e) {}
     }
 
     async getAllCertifications() {
       await this.init();
+      const orderIds = VERIFIED_CERTIFICATIONS.map((c) => c.id);
+      const sortCerts = (list) =>
+        list.slice().sort((a, b) => {
+          const ia = orderIds.indexOf(a.id);
+          const ib = orderIds.indexOf(b.id);
+          if (ia !== -1 && ib !== -1) return ia - ib;
+          if (ia !== -1) return -1;
+          if (ib !== -1) return 1;
+          return 0;
+        });
+
       if (this.db && this.db.objectStoreNames.contains(STORE_CERTIFICATIONS)) {
         return new Promise((resolve) => {
           try {
             const tx = this.db.transaction([STORE_CERTIFICATIONS], 'readonly');
             const store = tx.objectStore(STORE_CERTIFICATIONS);
             const req = store.getAll();
-            req.onsuccess = () => resolve(req.result && req.result.length ? req.result : VERIFIED_CERTIFICATIONS);
+            req.onsuccess = () => {
+              const res = req.result && req.result.length ? sortCerts(req.result) : VERIFIED_CERTIFICATIONS;
+              resolve(res);
+            };
             req.onerror = () => resolve(VERIFIED_CERTIFICATIONS);
           } catch (e) {
             resolve(VERIFIED_CERTIFICATIONS);
@@ -208,7 +287,7 @@
       }
       try {
         const cached = JSON.parse(localStorage.getItem(LS_CERTS_KEY) || 'null');
-        return cached && cached.length ? cached : VERIFIED_CERTIFICATIONS;
+        return cached && cached.length ? sortCerts(cached) : VERIFIED_CERTIFICATIONS;
       } catch (e) {
         return VERIFIED_CERTIFICATIONS;
       }
@@ -218,6 +297,45 @@
       const all = await this.getAllCertifications();
       if (category === 'all') return all;
       return all.filter((c) => (c.category || '').includes(category));
+    }
+
+    async addCertification(cert) {
+      await this.init();
+      const record = {
+        id: cert.id || `custom-cert-${Date.now()}`,
+        title: cert.title || 'Untitled Certification',
+        issuer: cert.issuer || 'Verified Issuer',
+        category: cert.category || 'gcp',
+        date: cert.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        score: cert.score || 'Verified',
+        badgeImage: cert.badgeImage || '',
+        pdfUrl: cert.pdfUrl || '',
+        verifyUrl: cert.verifyUrl || '',
+        description: cert.description || '',
+        skills: Array.isArray(cert.skills) ? cert.skills : []
+      };
+
+      try {
+        const existing = JSON.parse(localStorage.getItem(LS_CERTS_KEY) || '[]');
+        const filtered = Array.isArray(existing) ? existing.filter((c) => c.id !== record.id) : [];
+        filtered.unshift(record);
+        localStorage.setItem(LS_CERTS_KEY, JSON.stringify(filtered));
+      } catch (e) {}
+
+      if (this.db && this.db.objectStoreNames.contains(STORE_CERTIFICATIONS)) {
+        return new Promise((resolve) => {
+          try {
+            const tx = this.db.transaction([STORE_CERTIFICATIONS], 'readwrite');
+            const store = tx.objectStore(STORE_CERTIFICATIONS);
+            const req = store.put(record);
+            req.onsuccess = () => resolve({ success: true, data: record, storage: 'indexedDB' });
+            req.onerror = () => resolve({ success: true, data: record, storage: 'localStorage' });
+          } catch (e) {
+            resolve({ success: true, data: record, storage: 'localStorage' });
+          }
+        });
+      }
+      return { success: true, data: record, storage: 'localStorage' };
     }
 
     async saveSubmission(data) {
@@ -314,5 +432,6 @@
     module.exports = instance;
   } else {
     global.PortfolioDB = instance;
+    global.VERIFIED_CERTIFICATIONS = VERIFIED_CERTIFICATIONS;
   }
 })(typeof window !== 'undefined' ? window : globalThis);

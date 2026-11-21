@@ -14,7 +14,7 @@
     .db-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(3, 6, 14, 0.82);
+      background: rgba(3, 6, 14, 0.84);
       -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       z-index: 999;
@@ -30,8 +30,8 @@
 
     .db-modal {
       width: 100%;
-      max-width: 720px;
-      max-height: 84vh;
+      max-width: 780px;
+      max-height: 86vh;
       overflow-y: auto;
       background: #0b1121;
       border: 1px solid rgba(56, 189, 248, 0.35);
@@ -44,15 +44,41 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       gap: 1rem;
       padding-bottom: 1rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.1rem;
       border-bottom: 1px solid rgba(148, 163, 184, 0.16);
     }
 
     .db-modal-header h3 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.3rem;
+    }
+
+    .db-tab-bar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .db-tab-btn {
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(15, 23, 42, 0.7);
+      color: #94a3b8;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .db-tab-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: #38bdf8;
+      color: #38bdf8;
     }
 
     .db-entry-list {
@@ -179,7 +205,7 @@
             </div>
             <div class="metric-divider"></div>
             <div class="metric-item">
-              <span class="metric-value">17+</span>
+              <span class="metric-value">19+</span>
               <span class="metric-label">Google Cloud &amp; AI Badges</span>
             </div>
             <div class="metric-divider"></div>
@@ -210,7 +236,7 @@
   <span class="code-prop">location</span>: <span class="code-str">"Kolkata / Ranaghat, WB, India"</span>,
   <span class="code-prop">languages</span>: [<span class="code-str">"Python"</span>, <span class="code-str">"JS/TS"</span>, <span class="code-str">"Java"</span>, <span class="code-str">"C++"</span>, <span class="code-str">"SQL"</span>],
   <span class="code-prop">cloudAI</span>: [
-    <span class="code-str">"GCP (Vision, Speech, Storage, IAM)"</span>,
+    <span class="code-str">"GCP (Vertex AI, Vision, Speech, Cloud Run, IAM)"</span>,
     <span class="code-str">"Google AI Studio &amp; Gemini Enterprise"</span>,
     <span class="code-str">"ISRO-IIRS Geodata ML"</span>
   ],
@@ -512,7 +538,7 @@
       </div>
     </section>
 
-    <!-- Certifications & Verified Skill Badges -->
+    <!-- Certifications & Verified Skill Badges (Dynamically Populated from PortfolioDB) -->
     <section id="certifications" class="section">
       <div class="container">
         <div class="section-header" data-reveal>
@@ -521,166 +547,13 @@
         </div>
 
         <div class="filter-bar" id="certFilterBar" data-reveal>
-          <button type="button" class="cert-filter-btn active" data-cert-filter="all">All Credentials (17+)</button>
-          <button type="button" class="cert-filter-btn" data-cert-filter="gcp">Google Cloud Skills</button>
-          <button type="button" class="cert-filter-btn" data-cert-filter="coursera">Coursera &amp; Google AI</button>
+          <button type="button" class="cert-filter-btn active" data-cert-filter="all">All Credentials (19+)</button>
+          <button type="button" class="cert-filter-btn" data-cert-filter="gcp">Google Cloud Skills (11)</button>
+          <button type="button" class="cert-filter-btn" data-cert-filter="coursera">Coursera &amp; Google AI (7)</button>
           <button type="button" class="cert-filter-btn" data-cert-filter="programs">ISRO &amp; National Fellowships</button>
         </div>
 
-        <div class="certs-grid" id="certsGrid">
-          <!-- Nov 15, 2026 GCP Cloud Vision API Skill Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal>
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Nov 15, 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>Analyze Images with the Cloud Vision API Skill Badge</h4>
-              <p>Computer vision pipelines for OCR text extraction, label classification, and face &amp; landmark detection in images.</p>
-            </div>
-            <a href="https://www.credly.com/go/fImRn2Gge8A1849E98XXlQ" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
-              Verify on Credly &nearr;
-            </a>
-          </div>
-
-          <!-- Nov 15, 2026 GCP Speech API Skill Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Nov 15, 2026</span>
-                <span class="cert-score-tag">Skill Badge</span>
-              </div>
-              <h4>Using the Google Cloud Speech API</h4>
-              <p>Building Speech-to-Text API requests and automated audio-to-text transcription workflows on Google Cloud.</p>
-            </div>
-            <a href="https://www.credly.com/go/gA59Rnf3Idc3nXIJEQjFJw" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
-              Verify on Credly &nearr;
-            </a>
-          </div>
-
-          <!-- Nov 13, 2026 GCP Skill Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="120">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Nov 13, 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>Store, Process, and Manage Data on Google Cloud</h4>
-              <p>Cloud Storage bucket administration, event-driven Cloud Functions, and Cloud Pub/Sub messaging workflows.</p>
-            </div>
-            <a href="https://www.credly.com/go/Ih7X0eZE9Wxoz6V0qHtTIQ" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
-              Verify on Credly &nearr;
-            </a>
-          </div>
-
-          <!-- Nov 12, 2026 GCP AI Studio Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal>
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Nov 12, 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>Develop AI-Powered Prototypes in Google AI Studio</h4>
-              <p>System prompt engineering, multimodal image/video analysis, and API-key generative AI prototyping.</p>
-            </div>
-            <a href="https://www.credly.com/go/kFCQa6zQvMeA4awEbDkEQA" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
-              Verify on Credly &nearr;
-            </a>
-          </div>
-
-          <!-- Nov 12, 2026 GCP Speech & Language Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Nov 12, 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>Implement Speech and Language Solutions with Pre-trained APIs</h4>
-              <p>Speech-to-Text transcription, Text-to-Speech synthesis, and Cloud Natural Language entity/sentiment APIs.</p>
-            </div>
-            <a href="https://www.credly.com/go/GrInb6kGb8mbxBYAkvvtgw" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
-              Verify on Credly &nearr;
-            </a>
-          </div>
-
-          <!-- Nov 2026 Coursera 5-Course Specialization -->
-          <div class="cert-card spotlight-card" data-cert-cat="coursera" data-reveal data-delay="120">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google &amp; Coursera &bull; Nov 2026</span>
-                <span class="cert-score-tag">5-Course Specialization</span>
-              </div>
-              <h4>Google AI Essentials Specialization (Verified)</h4>
-              <p>Completed all 5 Career Certificates: Intro to AI, Maximize Productivity With AI Tools, Art of Prompting, Stay Ahead of the AI Curve &amp; Use AI Responsibly.</p>
-            </div>
-            <span class="cert-id-text">IDs: MEQD6YIAY16P &bull; 6HBXWYU77HYQ &bull; VNSOVA9W8ZJB</span>
-          </div>
-
-          <!-- Nov 2026 AI Boost Bootcamp -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp coursera" data-reveal>
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud &bull; Nov 2026</span>
-                <span class="cert-score-tag">Completion Badge</span>
-              </div>
-              <h4>AI Boost Bootcamp: How to Use Gemini at Work 101</h4>
-              <p>Applied enterprise Gemini workspace automation, structured prompting frameworks, and AI productivity pipelines.</p>
-            </div>
-            <span class="cert-id-text">Google Cloud Skills &bull; November 2026</span>
-          </div>
-
-          <!-- Oct 2026 GCP IAM Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="60">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Oct 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>Configure Service Accounts and IAM Roles for Google Cloud</h4>
-              <p>Custom YAML IAM roles, service account bindings, gcloud CLI policies, and BigQuery Python client authentication.</p>
-            </div>
-            <span class="cert-id-text">Google Cloud / Credly Verified</span>
-          </div>
-
-          <!-- Oct 2026 GCP Compute Badge -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp" data-reveal data-delay="120">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud Skills &bull; Oct 2026</span>
-                <span class="cert-score-tag">100% Lab Score</span>
-              </div>
-              <h4>The Basics of Google Cloud Compute</h4>
-              <p>Compute Engine VM provisioning, persistent disk attachment, and Nginx web server deployment.</p>
-            </div>
-            <span class="cert-id-text">Google Cloud / Credly Verified</span>
-          </div>
-
-          <!-- Gemini Enterprise + Coursera Cloud -->
-          <div class="cert-card spotlight-card" data-cert-cat="gcp coursera" data-reveal>
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">Google Cloud &amp; Coursera</span>
-                <span class="cert-score-tag">Multi-Badge</span>
-              </div>
-              <h4>Gemini Enterprise, Cloud Computing &amp; Cloud Security</h4>
-              <p>Deep research agents in Gemini Enterprise/NotebookLM plus Coursera certifications in Generative AI, Cloud Computing &amp; Security.</p>
-            </div>
-            <span class="cert-id-text">Google Cloud Career Launchpad (APAC)</span>
-          </div>
-
-          <!-- National Fellowships -->
-          <div class="cert-card spotlight-card" data-cert-cat="programs" data-reveal data-delay="60">
-            <div>
-              <div class="cert-top">
-                <span class="cert-issuer">ISRO IIRS &bull; Govt. of India</span>
-                <span class="cert-score-tag">National Fellowships</span>
-              </div>
-              <h4>ISRO IIRS Geodata ML &amp; IICT AI Skills House</h4>
-              <p>ISRO IIRS AI/ML for Geodata Analysis (Reg: 20261883026394), IICT AISH Scholar (ID: IICT-16082662223) &amp; Gemini Quizwar 2026.</p>
-            </div>
-            <span class="cert-id-text">ISRO Dehradun &bull; Ministry of I&amp;B</span>
-          </div>
-        </div>
+        <div class="certs-grid" id="certsGrid"></div>
       </div>
     </section>
 
@@ -734,7 +607,7 @@
             <div class="resume-mini-grid">
               <div class="resume-mini-col">
                 <h5>Core Stack</h5>
-                <p>Python, Java, JS/TS, C++, SQL/PostgreSQL, React.js, Tailwind CSS, Three.js, Node.js, Express.js, GCP (Vision, Speech, Storage, IAM)</p>
+                <p>Python, Java, JS/TS, C++, SQL/PostgreSQL, React.js, Tailwind CSS, Three.js, Node.js, Express.js, GCP (Vertex AI, Vision, Speech, Cloud Run, IAM)</p>
               </div>
               <div class="resume-mini-col">
                 <h5>Experience &amp; Systems</h5>
@@ -742,7 +615,7 @@
               </div>
               <div class="resume-mini-col">
                 <h5>Verified Credentials</h5>
-                <p>Cloud Vision &amp; Speech API Badges &bull; Google AI Essentials (5 Courses) &bull; Google AI Studio &bull; 100% GCP Challenge Labs &bull; ISRO IIRS &amp; IICT AISH</p>
+                <p>Vertex AI Gemini API &amp; Build on GCP Badges &bull; Cloud Vision &amp; Speech API &bull; Google AI Essentials (5 Courses) &bull; Google AI Studio &bull; ISRO IIRS &amp; IICT AISH</p>
               </div>
             </div>
           </div>
@@ -776,9 +649,9 @@
               </div>
             </div>
 
-            <div style="margin-top: 1.75rem;">
+            <div style="margin-top: 1.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
               <button type="button" id="openDbModalBtn" class="btn btn-secondary">
-                <span>View Local Client DB Logs</span>
+                <span>Inspect PortfolioDB (Logs &amp; Certs)</span>
               </button>
             </div>
           </div>
@@ -838,19 +711,25 @@
     </section>
   </main>
 
-  <!-- Local PortfolioDB Client Submissions Modal -->
+  <!-- Local PortfolioDB Client Submissions & Certifications Modal -->
   <div class="db-modal-backdrop" id="dbModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="dbModalTitle">
     <div class="db-modal">
       <div class="db-modal-header">
         <div>
-          <span class="section-tag" style="margin-bottom: 0.2rem;">INDEXEDDB + LOCALSTORAGE ENGINE</span>
-          <h3 id="dbModalTitle">Saved Client &amp; Recruiter Submissions</h3>
+          <span class="section-tag" style="margin-bottom: 0.2rem;">INDEXEDDB (V3) + LOCALSTORAGE ENGINE</span>
+          <h3 id="dbModalTitle">PortfolioDB Local Storage Inspector</h3>
         </div>
         <div style="display: flex; gap: 0.6rem;">
-          <button type="button" id="clearDbBtn" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">Clear Logs</button>
+          <button type="button" id="clearDbBtn" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">Clear Client Logs</button>
           <button type="button" id="closeDbModalBtn" class="btn btn-primary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">Close</button>
         </div>
       </div>
+
+      <div class="db-tab-bar">
+        <button type="button" class="db-tab-btn active" data-db-tab="certs">Verified Certifications Store</button>
+        <button type="button" class="db-tab-btn" data-db-tab="submissions">Client &amp; Recruiter Logs</button>
+      </div>
+
       <div class="db-entry-list" id="dbEntryList">
         <p style="color: #94a3b8;">Loading records from PortfolioDB...</p>
       </div>
@@ -883,9 +762,37 @@
       const listEl = document.getElementById('dbEntryList');
       const contactForm = document.getElementById('contactForm');
       const dbToast = document.getElementById('dbToast');
+      const dbTabs = document.querySelectorAll('.db-tab-btn');
+      let currentTab = 'certs';
 
-      async function renderDbEntries() {
+      async function renderDbView() {
         if (!window.PortfolioDB || !listEl) return;
+
+        if (currentTab === 'certs') {
+          const certs = await window.PortfolioDB.getAllCertifications();
+          listEl.innerHTML = certs
+            .map(
+              (c) => `
+              <div class="db-entry-card">
+                <div class="db-entry-top">
+                  <strong>${c.title}</strong>
+                  <span class="db-entry-badge">${c.date} &bull; ${c.score}</span>
+                </div>
+                <div style="color:#38bdf8;font-size:0.78rem;margin-bottom:0.35rem;">
+                  ${c.issuer} &bull; Category: <code>${c.category}</code>
+                </div>
+                <p style="color:#cbd5e1;margin:0 0 0.45rem;">${c.description || ''}</p>
+                <div style="display:flex;gap:0.85rem;flex-wrap:wrap;font-size:0.78rem;">
+                  ${c.verifyUrl ? `<a href="${c.verifyUrl}" target="_blank" rel="noopener noreferrer" style="color:#34d399;text-decoration:none;">Verify Link &nearr;</a>` : ''}
+                  ${c.pdfUrl ? `<a href="${c.pdfUrl}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:none;">Open PDF &nearr;</a>` : ''}
+                </div>
+              </div>
+            `
+            )
+            .join('');
+          return;
+        }
+
         const rows = await window.PortfolioDB.getAllSubmissions();
         if (!rows.length) {
           listEl.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem;">No local submissions saved yet. Submit the contact form to test IndexedDB / LocalStorage logging.</p>';
@@ -911,6 +818,15 @@
           .join('');
       }
 
+      dbTabs.forEach((tab) => {
+        tab.addEventListener('click', async () => {
+          dbTabs.forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.dbTab;
+          await renderDbView();
+        });
+      });
+
       if (contactForm && window.PortfolioDB) {
         contactForm.addEventListener('submit', async () => {
           const fd = new FormData(contactForm);
@@ -930,7 +846,7 @@
       if (openBtn && backdrop) {
         openBtn.addEventListener('click', async () => {
           backdrop.classList.add('open');
-          await renderDbEntries();
+          await renderDbView();
         });
       }
 
@@ -945,7 +861,9 @@
         clearBtn.addEventListener('click', async () => {
           if (window.PortfolioDB) {
             await window.PortfolioDB.clearAll();
-            await renderDbEntries();
+            currentTab = 'submissions';
+            dbTabs.forEach((t) => t.classList.toggle('active', t.dataset.dbTab === 'submissions'));
+            await renderDbView();
           }
         });
       }

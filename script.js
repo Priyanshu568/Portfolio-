@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // 1. Dynamic Footer Year
   const yearEl = document.getElementById('currentYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const roles = [
       'CSE (AI/ML & Cloud) Undergrad @ SVU',
       'Full-Stack & Backend Developer',
-      'Agentic AI & Cloud Vision Builder',
+      'Vertex AI, Gemini & Cloud Vision Builder',
       'Hackathon Team Leader & Freelancer'
     ];
     let roleIdx = 0;
@@ -107,10 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'React & Tailwind CSS', cat: 'web', tag: 'Frontend UI', level: 87 },
     { name: 'HTML5 & CSS3', cat: 'web', tag: 'Modern Web', level: 94 },
     { name: 'REST APIs & YAML Validation', cat: 'web', tag: 'Architecture', level: 89 },
-    { name: 'Google AI Studio & Gemini', cat: 'ai-cloud', tag: 'Multimodal AI', level: 91 },
+    { name: 'Vertex AI Gemini API & Function Calling', cat: 'ai-cloud', tag: 'Generative AI', level: 92 },
+    { name: 'Google AI Studio & Gemini Enterprise', cat: 'ai-cloud', tag: 'Multimodal AI', level: 91 },
     { name: 'Cloud Vision, Speech & NLP APIs', cat: 'ai-cloud', tag: 'Pre-Trained AI', level: 90 },
+    { name: 'Cloud Run, GKE & Cloud Build', cat: 'ai-cloud', tag: 'Cloud Native', level: 87 },
+    { name: 'GCP (Compute, Storage, IAM, Pub/Sub)', cat: 'ai-cloud', tag: 'Cloud & Security', level: 89 },
     { name: 'Leaflet / Mappls GIS', cat: 'ai-cloud', tag: 'Geospatial', level: 85 },
-    { name: 'GCP (Compute, Storage, IAM, Pub/Sub)', cat: 'ai-cloud', tag: 'Cloud & Security', level: 88 },
     { name: 'Git, GitHub & Netlify', cat: 'ai-cloud', tag: 'CI/CD & Ops', level: 91 }
   ];
 
@@ -169,51 +171,153 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6b. Certification Category Filtering
-  const certFilterBtns = document.querySelectorAll('.cert-filter-btn');
-  const certCards = document.querySelectorAll('.cert-card');
+  // 7. Mouse Spotlight & 3D Card Tilt Effect Helper
+  function attachSpotlightAndTilt(root = document) {
+    root.querySelectorAll('.spotlight-card').forEach((card) => {
+      if (card.dataset.spotlightBound === '1') return;
+      card.dataset.spotlightBound = '1';
 
-  certFilterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      certFilterBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.certFilter;
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
 
-      certCards.forEach((card) => {
-        const cats = card.dataset.certCat || '';
-        if (filter === 'all' || cats.includes(filter)) {
-          card.classList.remove('hidden-card');
-        } else {
-          card.classList.add('hidden-card');
+        if (card.classList.contains('tilt-card')) {
+          const rotateX = ((y - rect.height / 2) / rect.height) * -6;
+          const rotateY = ((x - rect.width / 2) / rect.width) * 6;
+          card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        }
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (card.classList.contains('tilt-card')) {
+          card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
         }
       });
     });
-  });
+  }
 
-  // 7. Mouse Spotlight & 3D Card Tilt Effect
-  document.querySelectorAll('.spotlight-card').forEach((card) => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+  attachSpotlightAndTilt(document);
 
-      if (card.classList.contains('tilt-card')) {
-        const rotateX = ((y - rect.height / 2) / rect.height) * -6;
-        const rotateY = ((x - rect.width / 2) / rect.width) * 6;
-        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-      }
+  // 8. Dynamic Certification Renderer from PortfolioDB (database.js)
+  const certsGrid = document.getElementById('certsGrid');
+  const certFilterBtns = document.querySelectorAll('.cert-filter-btn');
+  let allCertifications = [];
+
+  function buildCertCardHTML(cert) {
+    const isCoursera = (cert.category || '').includes('coursera') && !cert.badgeImage;
+    const isProgram = (cert.category || '').includes('programs');
+    const emblemHTML = cert.badgeImage
+      ? `<div class="cert-badge-wrap">
+           <img src="${cert.badgeImage}" alt="${cert.title}" class="cert-badge-thumb" loading="lazy" />
+         </div>`
+      : `<div class="cert-seal-box ${isProgram ? 'program-seal' : 'coursera-seal'}">
+           <span>${isProgram ? 'GOVT / ISRO' : 'GOOGLE / COURSERA'}</span>
+           <small>${isProgram ? 'FELLOWSHIP' : '5-COURSE CERT'}</small>
+         </div>`;
+
+    const skillsHTML =
+      Array.isArray(cert.skills) && cert.skills.length
+        ? `<div class="cert-skill-tags">
+             ${cert.skills.map((sk) => `<span>${sk}</span>`).join('')}
+           </div>`
+        : '';
+
+    const subCoursesHTML =
+      Array.isArray(cert.subCourses) && cert.subCourses.length
+        ? `<details class="cert-subcourses">
+             <summary>View 5 Individual Course Certificates &amp; PDFs</summary>
+             <ul>
+               ${cert.subCourses
+                 .map(
+                   (sc) => `
+                   <li>
+                     <span>${sc.title} (<code>${sc.id}</code>)</span>
+                     <span class="subcourse-links">
+                       <a href="${sc.verifyUrl}" target="_blank" rel="noopener noreferrer">Verify &nearr;</a>
+                       ${sc.pdfUrl ? `<a href="${sc.pdfUrl}" target="_blank" rel="noopener noreferrer">PDF</a>` : ''}
+                     </span>
+                   </li>
+                 `
+                 )
+                 .join('')}
+             </ul>
+           </details>`
+        : '';
+
+    const idBadgeHTML =
+      Array.isArray(cert.credentialIds) && cert.credentialIds.length && !cert.verifyUrl
+        ? `<span class="cert-id-text">IDs: ${cert.credentialIds.join(' &bull; ')}</span>`
+        : '';
+
+    return `
+      <article class="cert-card spotlight-card" data-cert-cat="${cert.category || 'gcp'}">
+        <div>
+          <div class="cert-top">
+            <span class="cert-issuer">${cert.issuer} &bull; ${cert.date}</span>
+            <span class="cert-score-tag">${cert.score || 'Verified'}</span>
+          </div>
+          <div class="cert-badge-header">
+            ${emblemHTML}
+            <div>
+              <h4>${cert.title}</h4>
+              <p>${cert.description || ''}</p>
+            </div>
+          </div>
+          ${skillsHTML}
+          ${subCoursesHTML}
+        </div>
+        <div class="cert-footer-actions">
+          ${
+            cert.verifyUrl
+              ? `<a href="${cert.verifyUrl}" target="_blank" rel="noopener noreferrer" class="cert-verify-link">
+                   Verify Credential &nearr;
+                 </a>`
+              : idBadgeHTML
+          }
+          ${
+            cert.pdfUrl
+              ? `<a href="${cert.pdfUrl}" target="_blank" rel="noopener noreferrer" class="cert-pdf-link">
+                   Certificate PDF &nearr;
+                 </a>`
+              : ''
+          }
+        </div>
+      </article>
+    `;
+  }
+
+  function renderCertifications(filter = 'all') {
+    if (!certsGrid) return;
+    const filtered =
+      filter === 'all'
+        ? allCertifications
+        : allCertifications.filter((c) => (c.category || '').includes(filter));
+
+    certsGrid.innerHTML = filtered.map(buildCertCardHTML).join('');
+    attachSpotlightAndTilt(certsGrid);
+  }
+
+  if (certsGrid) {
+    if (window.PortfolioDB) {
+      allCertifications = await window.PortfolioDB.getAllCertifications();
+    } else if (window.VERIFIED_CERTIFICATIONS) {
+      allCertifications = window.VERIFIED_CERTIFICATIONS;
+    }
+    renderCertifications('all');
+
+    certFilterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        certFilterBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCertifications(btn.dataset.certFilter);
+      });
     });
+  }
 
-    card.addEventListener('mouseleave', () => {
-      if (card.classList.contains('tilt-card')) {
-        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-      }
-    });
-  });
-
-  // 8. Intersection Observer for Scroll Reveals
+  // 9. Intersection Observer for Scroll Reveals
   const revealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -231,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
 
-  // 9. Interactive Neural Constellation Background Canvas
+  // 10. Interactive Neural Constellation Background Canvas
   const canvas = document.getElementById('neuralCanvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -311,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animateCanvas();
   }
 
-  // 10. Interactive Resume Role-Focus Switcher
+  // 11. Interactive Resume Role-Focus Switcher
   const resumeModes = {
     default: {
       headline: 'Frontend and Backend Developer | AI & Cloud Engineer',
@@ -326,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     aiml: {
       headline: 'Applied AI, Agentic Systems & Google Cloud Engineer',
       summary:
-        'Computer Science (AI/ML & Cloud Computing) undergraduate specializing in agentic AI workflows, Google AI Studio prototyping, Cloud Vision & Speech APIs, geospatial ML (ISRO-IIRS), and GCP cloud infrastructure (Compute Engine, Cloud Storage, Cloud Functions, Cloud Pub/Sub, IAM). Holder of the 5-course Google AI Essentials Specialization and 100%-scored Google Cloud Challenge Lab Skill Badges.'
+        'Computer Science (AI/ML & Cloud Computing) undergraduate specializing in agentic AI workflows, Vertex AI Gemini API, Google AI Studio prototyping, Cloud Vision & Speech APIs, geospatial ML (ISRO-IIRS), and GCP cloud infrastructure (Cloud Run, GKE, Compute Engine, Cloud Storage, Cloud Functions, Cloud Pub/Sub, IAM). Holder of the 5-course Google AI Essentials Specialization and 11 Google Cloud Skill Badges.'
     }
   };
 
