@@ -207,15 +207,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   let allCertifications = [];
 
   function buildCertCardHTML(cert) {
-    const isCoursera = (cert.category || '').includes('coursera') && !cert.badgeImage;
+    const isCoursera = (cert.category || '').includes('coursera');
     const isProgram = (cert.category || '').includes('programs');
+    const sealTitle = isProgram ? 'GOVT / ISRO' : isCoursera ? 'GOOGLE / COURSERA' : 'GOOGLE DEVELOPERS';
+    const sealSub = isProgram ? 'FELLOWSHIP' : isCoursera ? '5-COURSE CERT' : 'DEV BADGE';
+    const isCertImg = (cert.badgeImage || '').includes('certificate');
     const emblemHTML = cert.badgeImage
-      ? `<div class="cert-badge-wrap">
+      ? `<button type="button" class="cert-badge-wrap ${isCertImg ? 'cert-doc-wrap' : ''}" data-preview-src="${cert.badgeImage}" data-preview-title="${cert.title.replace(/"/g, '&quot;')}" data-preview-issuer="${cert.issuer.replace(/"/g, '&quot;')} • ${cert.date}" data-preview-verify="${cert.verifyUrl || ''}" data-preview-pdf="${cert.pdfUrl || ''}" aria-label="Preview ${cert.title.replace(/"/g, '&quot;')}" title="Click to view full certificate">
            <img src="${cert.badgeImage}" alt="${cert.title}" class="cert-badge-thumb" loading="lazy" />
-         </div>`
+         </button>`
       : `<div class="cert-seal-box ${isProgram ? 'program-seal' : 'coursera-seal'}">
-           <span>${isProgram ? 'GOVT / ISRO' : 'GOOGLE / COURSERA'}</span>
-           <small>${isProgram ? 'FELLOWSHIP' : '5-COURSE CERT'}</small>
+           <span>${sealTitle}</span>
+           <small>${sealSub}</small>
          </div>`;
 
     const skillsHTML =
@@ -298,6 +301,74 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     certsGrid.innerHTML = filtered.map(buildCertCardHTML).join('');
     attachSpotlightAndTilt(certsGrid);
+    bindCertPreviewTriggers(certsGrid);
+  }
+
+  function ensureCertLightbox() {
+    let modal = document.getElementById('certLightboxBackdrop');
+    if (modal) return modal;
+    modal = document.createElement('div');
+    modal.id = 'certLightboxBackdrop';
+    modal.className = 'cert-lightbox-backdrop';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.innerHTML = `
+      <div class="cert-lightbox-card">
+        <div class="cert-lightbox-header">
+          <div>
+            <span class="cert-lightbox-issuer" id="certLightboxIssuer"></span>
+            <h3 id="certLightboxTitle"></h3>
+          </div>
+          <button type="button" class="cert-lightbox-close" id="certLightboxClose" aria-label="Close preview">&times;</button>
+        </div>
+        <div class="cert-lightbox-body">
+          <img id="certLightboxImg" src="" alt="Certificate Preview" />
+        </div>
+        <div class="cert-lightbox-footer">
+          <a id="certLightboxVerify" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Verify Credential &nearr;</a>
+          <a id="certLightboxPdf" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Open Certificate PDF &nearr;</a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const close = () => modal.classList.remove('open');
+    modal.querySelector('#certLightboxClose').addEventListener('click', close);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+    return modal;
+  }
+
+  function bindCertPreviewTriggers(root) {
+    root.querySelectorAll('.cert-badge-wrap[data-preview-src]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const modal = ensureCertLightbox();
+        modal.querySelector('#certLightboxImg').src = btn.dataset.previewSrc;
+        modal.querySelector('#certLightboxImg').alt = btn.dataset.previewTitle;
+        modal.querySelector('#certLightboxTitle').textContent = btn.dataset.previewTitle;
+        modal.querySelector('#certLightboxIssuer').textContent = btn.dataset.previewIssuer;
+
+        const verifyLink = modal.querySelector('#certLightboxVerify');
+        const pdfLink = modal.querySelector('#certLightboxPdf');
+        if (btn.dataset.previewVerify) {
+          verifyLink.href = btn.dataset.previewVerify;
+          verifyLink.style.display = 'inline-flex';
+        } else {
+          verifyLink.style.display = 'none';
+        }
+        if (btn.dataset.previewPdf) {
+          pdfLink.href = btn.dataset.previewPdf;
+          pdfLink.style.display = 'inline-flex';
+        } else {
+          pdfLink.style.display = 'none';
+        }
+        modal.classList.add('open');
+      });
+    });
   }
 
   if (certsGrid) {

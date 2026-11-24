@@ -1,22 +1,58 @@
 /**
  * database.js - Client-Side Database System for Priyanshu Bhatta Portfolio
  *
- * Provides an asynchronous database engine using IndexedDB (v3) with automatic LocalStorage fallback.
+ * Provides an asynchronous database engine using IndexedDB (v6) with automatic LocalStorage fallback.
  * Stores both recruiter/client form submissions and Priyanshu Bhatta's verified certifications,
- * Google Cloud skill badges, Coursera credentials, and local asset links.
+ * Google Developer Program milestones, Google Cloud skill badges, Coursera credentials, and local asset links.
  */
 
 (function (global) {
   'use strict';
 
   const DB_NAME = 'PortfolioClientDB';
-  const DB_VERSION = 3;
+  const DB_VERSION = 6;
   const STORE_SUBMISSIONS = 'client_submissions';
   const STORE_CERTIFICATIONS = 'certifications';
   const LS_SUBMISSIONS_KEY = 'pb_client_submissions';
-  const LS_CERTS_KEY = 'pb_verified_certifications_v3';
+  const LS_CERTS_KEY = 'pb_verified_certifications_v6';
 
   const VERIFIED_CERTIFICATIONS = [
+    {
+      id: 'gdg-cloud-kolkata-member-2026',
+      title: 'Google Developer Groups (GDG) Cloud Kolkata Member',
+      issuer: 'Google Developer Program',
+      category: 'gcp programs',
+      date: 'Nov 25, 2026',
+      score: 'Community Badge',
+      badgeImage: 'assets/badges/gdg-cloud-kolkata.svg',
+      verifyUrl: 'https://me.developers.google.com',
+      description: 'Official member of the Google Developer Groups (GDG) Cloud Kolkata chapter, collaborating on cloud-native architecture, AI/ML meetups, and community engineering.',
+      skills: ['Google Cloud', 'GDG Cloud Kolkata', 'Cloud Architecture', 'AI/ML Community']
+    },
+    {
+      id: 'google-cloud-badge-google-skills-2026',
+      title: 'Google Cloud Skill Badge — Google Skills',
+      issuer: 'Google Developer Program',
+      category: 'gcp',
+      date: 'Nov 25, 2026',
+      score: 'Skill Badge',
+      badgeImage: 'assets/badges/google-skills-badge.svg',
+      verifyUrl: 'https://me.developers.google.com',
+      description: 'Verified hands-on Google Cloud lab achievement earned via Google Skills and the Google Developer Program across cloud infrastructure and AI workflows.',
+      skills: ['Google Cloud Platform', 'Google Skills', 'Cloud Infrastructure', 'Hands-On Labs']
+    },
+    {
+      id: 'google-developer-program-premium-2026',
+      title: 'Google Developer Program — Premium Tier Member',
+      issuer: 'Google Developer Program',
+      category: 'gcp programs',
+      date: 'Nov 25, 2026',
+      score: 'Premium Tier',
+      badgeImage: 'assets/badges/gdp-premium-tier.svg',
+      verifyUrl: 'https://me.developers.google.com',
+      description: 'Active subscriber to the Google Developer Program Premium Tier with access to Gemini Code Assist, Google Cloud developer credits, and advanced AI tooling.',
+      skills: ['Google Cloud', 'Gemini Code Assist', 'Cloud Credits', 'AI Engineering']
+    },
     {
       id: 'gcp-vertex-gemini-api-2026',
       title: 'Explore Generative AI with the Vertex AI Gemini API Skill Badge',
@@ -107,8 +143,9 @@
       title: 'Google AI Essentials Specialization (5 Courses)',
       issuer: 'Google & Coursera',
       category: 'coursera',
-      date: 'Oct – Nov 2026',
+      date: 'Nov 12, 2026',
       score: '5-Course Specialization',
+      badgeImage: 'assets/badges/coursera-google-ai-essentials-certificate.png',
       pdfUrl: 'assets/certificates/Coursera_ERYLOPI8Q2KC_Google_AI_Essentials_Specialization.pdf',
       verifyUrl: 'https://coursera.org/verify/specialization/ERYLOPI8Q2KC',
       credentialIds: ['ERYLOPI8Q2KC', 'MEQD6YIAY16P', '6HBXWYU77HYQ', 'VNSOVA9W8ZJB', 'WQOYUYRLQ2ZW', '1DGWKM1OFI7J'],
@@ -221,6 +258,7 @@
               certTxStore = certStore;
             } else {
               certTxStore = event.target.transaction.objectStore(STORE_CERTIFICATIONS);
+              certTxStore.clear();
             }
 
             VERIFIED_CERTIFICATIONS.forEach((cert) => certTxStore.put(cert));
