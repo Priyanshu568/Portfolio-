@@ -1,7 +1,7 @@
 /**
  * database.js - Client-Side Database System for Priyanshu Bhatta Portfolio
  *
- * Provides an asynchronous database engine using IndexedDB (v6) with automatic LocalStorage fallback.
+ * Provides an asynchronous database engine using IndexedDB (v8) with automatic LocalStorage fallback.
  * Stores both recruiter/client form submissions and Priyanshu Bhatta's verified certifications,
  * Google Developer Program milestones, Google Cloud skill badges, Coursera credentials, and local asset links.
  */
@@ -10,13 +10,26 @@
   'use strict';
 
   const DB_NAME = 'PortfolioClientDB';
-  const DB_VERSION = 6;
+  const DB_VERSION = 8;
   const STORE_SUBMISSIONS = 'client_submissions';
   const STORE_CERTIFICATIONS = 'certifications';
   const LS_SUBMISSIONS_KEY = 'pb_client_submissions';
-  const LS_CERTS_KEY = 'pb_verified_certifications_v6';
+  const LS_CERTS_KEY = 'pb_verified_certifications_v8';
 
   const VERIFIED_CERTIFICATIONS = [
+    {
+      id: 'orbion-8hr-hackathon-2026',
+      title: 'Orbion 8 Hour Hackathon — Tech Kurukshetra 2026',
+      issuer: 'IEM & UEM Kolkata • Unstop',
+      category: 'programs',
+      date: '2026',
+      score: 'Team Quantum Chaos',
+      badgeImage: 'assets/badges/orbion-8-hour-hackathon-certificate.png',
+      pdfUrl: 'assets/certificates/Orbion_8_Hour_Hackathon_Tech_Kurukshetra_2026.pdf',
+      verifyUrl: 'https://unstop.com/',
+      description: 'Participated as part of Team Quantum Chaos in the Orbion 8 Hour Hackathon during Tech Kurukshetra 2026, organized by the Dept. of CSE (IoT, CS, BT), Institute of Engineering and Management (IEM), Newtown, Kolkata.',
+      skills: ['8-Hour Hackathon', 'Rapid Prototyping', 'Team Quantum Chaos', 'Tech Kurukshetra 2026']
+    },
     {
       id: 'gdg-cloud-kolkata-member-2026',
       title: 'Google Developer Groups (GDG) Cloud Kolkata Member',
